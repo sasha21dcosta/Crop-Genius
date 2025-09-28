@@ -87,7 +87,16 @@ class DetectDiseaseView(APIView):
         global df, symptom_embeddings, model
         data = request.data
         input_text = data.get('symptom_text', '')
+        crop = data.get('crop', '').lower()  # Get selected crop
         followup_choice = data.get('followup_choice', None)
+        
+        # Filter KB by selected crop
+        if crop and crop in ['rice', 'wheat', 'apple', 'tomato', 'potato']:
+            crop_df = df[df['crop'].str.lower() == crop].copy()
+            if crop_df.empty:
+                return Response({'error': f'No disease data available for {crop}'}, status=400)
+        else:
+            return Response({'error': 'Please select a valid crop'}, status=400)
         user_lang = None
         translated = False
         translated_text = input_text
@@ -108,19 +117,23 @@ class DetectDiseaseView(APIView):
                     return Response({'error': 'Hindi-English translation model not available.'}, status=500)
                 translated_text = translator_hi_en(input_text)[0]['translation_text']
             translated = True
-        # 3. Embedding (use multilingual model)
+        # 3. Create crop-specific embeddings
+        crop_symptoms = crop_df['symptom_description'].tolist()
+        crop_embeddings = model.encode(crop_symptoms)
+        
+        # 4. Calculate similarity with crop-specific data
         input_emb = model.encode([translated_text])[0]
-        sims = cosine_sim_vectorized(symptom_embeddings, input_emb)
+        sims = cosine_sim_vectorized(crop_embeddings, input_emb)
         top_k = 5
         top_indices = np.argsort(sims)[-top_k:][::-1]
         top_scores = sims[top_indices]
-        confidence_threshold = 0.65
-        # Aggregate top candidate diseases
+        confidence_threshold = 0.55  # Lower threshold for crop-specific detection
+        # Aggregate top candidate diseases (using crop-specific data)
         candidate_map = {}
         for idx, score in zip(top_indices, top_scores):
-            if idx < 0 or idx >= len(df):
+            if idx < 0 or idx >= len(crop_df):
                 continue
-            row = df.iloc[idx]
+            row = crop_df.iloc[idx]
             disease = row['disease_name']
             if disease not in candidate_map:
                 candidate_map[disease] = {
@@ -155,11 +168,11 @@ class DetectDiseaseView(APIView):
                 if idx < 0 or idx >= len(top_indices):
                     return Response({'error': 'No matching row found.'}, status=400)
                 best_match_idx = top_indices[idx]
-                if best_match_idx < 0 or best_match_idx >= len(df):
+                if best_match_idx < 0 or best_match_idx >= len(crop_df):
                     return Response({'error': 'No matching row found.'}, status=400)
             except Exception:
                 best_match_idx = top_indices[0]
-            row = df.iloc[best_match_idx]
+            row = crop_df.iloc[best_match_idx]
             result = {
                 'final_prediction': {
                     'disease_name': row['disease_name'],
@@ -191,14 +204,14 @@ class DetectDiseaseView(APIView):
         if float(top_scores[0]) < confidence_threshold:
             followup_questions = []
             for i, idx in enumerate(top_indices):
-                if idx < 0 or idx >= len(df):
+                if idx < 0 or idx >= len(crop_df):
                     continue
-                desc = df.iloc[idx]['symptom_description']
+                desc = crop_df.iloc[idx]['symptom_description']
                 followup_questions.append(f"{i+1}. {desc}")
             question_text = (
-                "I'm not fully confident in the diagnosis. Please help me by answering one of the following questions about your crop.\n" +
-                "Which of these best matches what you see? Reply with the number.\n" +
-                "\n".join(followup_questions)
+                f"I'm analyzing your {crop} symptoms but need more details for accurate diagnosis.\n" +
+                "Which of these symptoms best matches what you see on your crop?\n" +
+                "\n".join(followup_questions[:3])  # Limit to top 3 for clarity
             )
             return Response({
                 'need_followup': True,

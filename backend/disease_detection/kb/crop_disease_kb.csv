@@ -1,27 +1,66 @@
 disease_name,crop,symptom_description,affected_part,type,stage,treatment,prevention,language
-Rice Blast,rice,brown spots on rice leaves,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
-Rice Blast,rice,rice leaves drying with brown patches,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
-Rice Blast,rice,leaves with brown spots,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
-Rice Blast,rice,brown circles on leaves,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
-Nitrogen Deficiency,wheat,yellowing of wheat leaves,leaf,nutrient,any,Apply N fertilizer,Regular soil testing,en
-Nitrogen Deficiency,wheat,pale leaves and stunted wheat growth,leaf,nutrient,any,Apply N fertilizer,Regular soil testing,en
-Nitrogen Deficiency,wheat,leaves turning yellow stunted growth,leaf,nutrient,any,Apply N fertilizer,Regular soil testing,en
-Potato Early Blight,potato,circular brown spots with concentric rings on leaves,leaf,disease,early,Fungicide ABC,Remove infected leaves,en
-Potato Early Blight,potato,target-like dark spots spreading on potato leaves,leaf,disease,early,Fungicide ABC,Remove infected leaves,en
-Potato Early Blight,potato,leaves with brown round spots,leaf,disease,early,Fungicide ABC,Remove infected leaves,en
-Potato Late Blight,potato,irregular water-soaked brown lesions on leaves,leaf,disease,any,Fungicide DEF,Avoid wet conditions,en
-Potato Late Blight,potato,leaves look oily or wet with irregular brown areas,leaf,disease,any,Fungicide DEF,Avoid wet conditions,en
-Powdery Mildew,potato,white powdery coating on upper surface of leaves,leaf,disease,any,Apply fungicide ABC,Avoid high humidity,en
-Powdery Mildew,potato,leaves appear dusted with flour-like substance,leaf,disease,any,Apply fungicide ABC,Avoid high humidity,en
-Powdery Mildew,potato,leaves covered with white powder,leaf,disease,any,Apply fungicide ABC,Avoid high humidity,en
-Downy Mildew,cucumber,fuzzy growth on underside of leaves with yellow patches above,leaf,disease,any,Apply fungicide GHI,Avoid high humidity,en
-Downy Mildew,cucumber,grayish mold on the lower leaf surface,leaf,disease,any,Apply fungicide GHI,Avoid high humidity,en
-Maize Streak Virus,maize,yellow patches on maize leaves,leaf,disease,any,Remove infected plants,Use resistant varieties,en
-Maize Streak Virus,maize,striped yellowing on maize leaves,leaf,disease,any,Remove infected plants,Use resistant varieties,en
-Tomato Leaf Curl Virus,tomato,tomato leaves curling and yellowing,leaf,disease,any,Remove infected plants,Use resistant varieties,en
-Tomato Leaf Curl Virus,tomato,small leaves and stunted tomato growth,leaf,disease,any,Remove infected plants,Use resistant varieties,en
-Tomato Leaf Curl Virus,tomato,leaves curling yellowing,leaf,disease,any,Remove infected plants,Use resistant varieties,en
-Phosphorus Deficiency,maize,dark green leaves with purple tinge,leaf,nutrient,any,Apply P fertilizer,Regular soil testing,en
-Phosphorus Deficiency,maize,maize plants with purple stems and leaves,leaf,nutrient,any,Apply P fertilizer,Regular soil testing,en
-Potassium Deficiency,potato,leaf edges turning brown and curling,leaf,nutrient,any,Apply K fertilizer,Regular soil testing,en
-Potassium Deficiency,potato,edges of leaf browning curling,leaf,nutrient,any,Apply K fertilizer,Regular soil testing,en
+Rice Blast,rice,brown spots on rice leaves,leaf,disease,early,Apply Tricyclazole fungicide,Avoid excess nitrogen fertilizer,en
+Rice Blast,rice,rice leaves drying with brown patches,leaf,disease,early,Apply Tricyclazole fungicide,Avoid excess nitrogen fertilizer,en
+Rice Blast,rice,leaves with brown spots and yellow halos,leaf,disease,early,Apply Tricyclazole fungicide,Avoid excess nitrogen fertilizer,en
+Rice Blast,rice,brown circular lesions on leaves,leaf,disease,early,Apply Tricyclazole fungicide,Avoid excess nitrogen fertilizer,en
+Rice Blast,rice,leaf spots with gray centers,leaf,disease,early,Apply Tricyclazole fungicide,Avoid excess nitrogen fertilizer,en
+Rice Brown Spot,rice,small brown spots on leaves,leaf,disease,mid,Apply Mancozeb spray,Proper seed treatment,en
+Rice Brown Spot,rice,oval brown lesions on rice leaves,leaf,disease,mid,Apply Mancozeb spray,Proper seed treatment,en
+Rice Brown Spot,rice,dark brown spots with light centers,leaf,disease,mid,Apply Mancozeb spray,Proper seed treatment,en
+Rice Brown Spot,rice,numerous small brown spots on leaves,leaf,disease,mid,Apply Mancozeb spray,Proper seed treatment,en
+Rice Sheath Blight,rice,lesions on leaf sheaths near water line,sheath,disease,mid,Apply Validamycin,Maintain proper plant spacing,en
+Rice Sheath Blight,rice,oval to irregular lesions on sheaths,sheath,disease,mid,Apply Validamycin,Maintain proper plant spacing,en
+Rice Sheath Blight,rice,greenish gray lesions with brown margins,sheath,disease,mid,Apply Validamycin,Maintain proper plant spacing,en
+Rice Sheath Blight,rice,water soaked lesions on lower sheaths,sheath,disease,mid,Apply Validamycin,Maintain proper plant spacing,en
+Wheat Rust,wheat,orange-red pustules on wheat leaves,leaf,disease,early,Apply Propiconazole fungicide,Use resistant varieties,en
+Wheat Rust,wheat,rust colored spots on leaf surface,leaf,disease,early,Apply Propiconazole fungicide,Use resistant varieties,en
+Wheat Rust,wheat,reddish brown powdery spots on leaves,leaf,disease,early,Apply Propiconazole fungicide,Use resistant varieties,en
+Wheat Rust,wheat,orange pustules breaking through leaf surface,leaf,disease,early,Apply Propiconazole fungicide,Use resistant varieties,en
+Wheat Rust,wheat,rust colored powder on wheat leaves,leaf,disease,early,Apply Propiconazole fungicide,Use resistant varieties,en
+Wheat Powdery Mildew,wheat,white powdery coating on leaves,leaf,disease,early,Apply Sulfur fungicide,Avoid overcrowding plants,en
+Wheat Powdery Mildew,wheat,white dusty patches on wheat leaves,leaf,disease,early,Apply Sulfur fungicide,Avoid overcrowding plants,en
+Wheat Powdery Mildew,wheat,flour-like white coating on leaves,leaf,disease,early,Apply Sulfur fungicide,Avoid overcrowding plants,en
+Wheat Powdery Mildew,wheat,white fungal growth on leaf surface,leaf,disease,early,Apply Sulfur fungicide,Avoid overcrowding plants,en
+Wheat Leaf Blight,wheat,brown lesions on wheat leaves,leaf,disease,mid,Apply Copper fungicide,Crop rotation practice,en
+Wheat Leaf Blight,wheat,elongated brown spots on leaves,leaf,disease,mid,Apply Copper fungicide,Crop rotation practice,en
+Wheat Leaf Blight,wheat,tan to brown lesions with dark borders,leaf,disease,mid,Apply Copper fungicide,Crop rotation practice,en
+Wheat Leaf Blight,wheat,brown blotches spreading on leaves,leaf,disease,mid,Apply Copper fungicide,Crop rotation practice,en
+Apple Scab,apple,dark scabby lesions on apple leaves,leaf,disease,early,Apply Captan fungicide,Remove fallen leaves,en
+Apple Scab,apple,olive-green to black spots on leaves,leaf,disease,early,Apply Captan fungicide,Remove fallen leaves,en
+Apple Scab,apple,velvety dark spots on apple leaves,leaf,disease,early,Apply Captan fungicide,Remove fallen leaves,en
+Apple Scab,apple,black sooty spots on leaf surface,leaf,disease,early,Apply Captan fungicide,Remove fallen leaves,en
+Apple Scab,apple,dark circular lesions on leaves,leaf,disease,early,Apply Captan fungicide,Remove fallen leaves,en
+Apple Fire Blight,apple,blackened wilted shoots and leaves,shoot,disease,mid,Apply Streptomycin spray,Prune infected branches,en
+Apple Fire Blight,apple,burnt appearance of apple branches,shoot,disease,mid,Apply Streptomycin spray,Prune infected branches,en
+Apple Fire Blight,apple,blackened leaves that stay attached,shoot,disease,mid,Apply Streptomycin spray,Prune infected branches,en
+Apple Fire Blight,apple,shepherd's crook bending of shoots,shoot,disease,mid,Apply Streptomycin spray,Prune infected branches,en
+Apple Powdery Mildew,apple,white powdery coating on apple leaves,leaf,disease,early,Apply Myclobutanil,Improve air circulation,en
+Apple Powdery Mildew,apple,silvery white patches on leaves,leaf,disease,early,Apply Myclobutanil,Improve air circulation,en
+Apple Powdery Mildew,apple,white fungal growth on leaf surface,leaf,disease,early,Apply Myclobutanil,Improve air circulation,en
+Apple Powdery Mildew,apple,dusty white coating on apple leaves,leaf,disease,early,Apply Myclobutanil,Improve air circulation,en
+Tomato Early Blight,tomato,dark spots with concentric rings on leaves,leaf,disease,early,Apply Chlorothalonil,Remove infected debris,en
+Tomato Early Blight,tomato,target-like lesions on tomato leaves,leaf,disease,early,Apply Chlorothalonil,Remove infected debris,en
+Tomato Early Blight,tomato,brown spots with yellow halos on leaves,leaf,disease,early,Apply Chlorothalonil,Remove infected debris,en
+Tomato Early Blight,tomato,circular brown lesions on lower leaves,leaf,disease,early,Apply Chlorothalonil,Remove infected debris,en
+Tomato Early Blight,tomato,bull's eye pattern spots on leaves,leaf,disease,early,Apply Chlorothalonil,Remove infected debris,en
+Tomato Late Blight,tomato,water-soaked lesions on tomato leaves,leaf,disease,mid,Apply Metalaxyl fungicide,Avoid overhead watering,en
+Tomato Late Blight,tomato,dark green water-soaked spots on leaves,leaf,disease,mid,Apply Metalaxyl fungicide,Avoid overhead watering,en
+Tomato Late Blight,tomato,brown lesions with white fuzzy growth,leaf,disease,mid,Apply Metalaxyl fungicide,Avoid overhead watering,en
+Tomato Late Blight,tomato,rapidly spreading brown patches on leaves,leaf,disease,mid,Apply Metalaxyl fungicide,Avoid overhead watering,en
+Tomato Bacterial Wilt,tomato,sudden wilting of tomato plants,whole_plant,disease,mid,Remove infected plants,Use disease-free seeds,en
+Tomato Bacterial Wilt,tomato,yellowing and wilting of leaves,leaf,disease,mid,Remove infected plants,Use disease-free seeds,en
+Tomato Bacterial Wilt,tomato,brown vascular streaking in stems,stem,disease,mid,Remove infected plants,Use disease-free seeds,en
+Tomato Bacterial Wilt,tomato,plant collapse without leaf yellowing,whole_plant,disease,mid,Remove infected plants,Use disease-free seeds,en
+Potato Early Blight,potato,circular brown spots with concentric rings on leaves,leaf,disease,early,Apply Mancozeb fungicide,Remove infected leaves,en
+Potato Early Blight,potato,target-like dark spots spreading on potato leaves,leaf,disease,early,Apply Mancozeb fungicide,Remove infected leaves,en
+Potato Early Blight,potato,brown lesions with alternating light and dark rings,leaf,disease,early,Apply Mancozeb fungicide,Remove infected leaves,en
+Potato Early Blight,potato,bull's eye lesions on potato foliage,leaf,disease,early,Apply Mancozeb fungicide,Remove infected leaves,en
+Potato Early Blight,potato,dark brown spots with yellow borders,leaf,disease,early,Apply Mancozeb fungicide,Remove infected leaves,en
+Potato Late Blight,potato,water-soaked lesions on potato leaves,leaf,disease,mid,Apply Copper fungicide,Destroy infected plants,en
+Potato Late Blight,potato,dark brown lesions with white mold on undersides,leaf,disease,mid,Apply Copper fungicide,Destroy infected plants,en
+Potato Late Blight,potato,rapidly spreading brown patches on leaves,leaf,disease,mid,Apply Copper fungicide,Destroy infected plants,en
+Potato Late Blight,potato,black rot on potato tubers,tuber,disease,late,Apply Copper fungicide,Destroy infected plants,en
+Potato Scab,potato,rough corky lesions on potato skin,tuber,disease,late,Use sulfur amendments,Maintain soil pH below 5.2,en
+Potato Scab,potato,raised brown scabby patches on tubers,tuber,disease,late,Use sulfur amendments,Maintain soil pH below 5.2,en
+Potato Scab,potato,cork-like rough spots on potato surface,tuber,disease,late,Use sulfur amendments,Maintain soil pH below 5.2,en
+Potato Scab,potato,warty growths on potato tubers,tuber,disease,late,Use sulfur amendments,Maintain soil pH below 5.2,en

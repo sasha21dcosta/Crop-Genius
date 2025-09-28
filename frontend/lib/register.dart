@@ -21,6 +21,14 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String _preferredLanguage = 'English';
+  List<String> _selectedCrops = [];
+  final List<Map<String, String>> _cropOptions = [
+    {'key': 'rice', 'label': 'Rice'},
+    {'key': 'wheat', 'label': 'Wheat'},
+    {'key': 'apple', 'label': 'Apple'},
+    {'key': 'tomato', 'label': 'Tomato'},
+    {'key': 'potato', 'label': 'Potato'},
+  ];
 
   void _register() async {
     var response = await http.post(
@@ -35,6 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
         'email': _emailController.text,
         'password': _passwordController.text,
         'preferred_language': _preferredLanguage,
+        'crops': _selectedCrops,
       }),
     );
 
@@ -73,7 +82,67 @@ class _RegisterPageState extends State<RegisterPage> {
             TextField(controller: _usernameController, decoration: InputDecoration(labelText: "Username")),
             TextField(controller: _emailController, decoration: InputDecoration(labelText: "Email"), keyboardType: TextInputType.emailAddress),
             TextField(controller: _passwordController, decoration: InputDecoration(labelText: "Password"), obscureText: true),
-            SizedBox(height: 12),
+            const SizedBox(height: 16),
+            // Multi-select crops
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey.shade300),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Crops Grown (Select all that apply)',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.grey.shade700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: _cropOptions.map((crop) {
+                      final selected = _selectedCrops.contains(crop['key']);
+                      return FilterChip(
+                        label: Text(crop['label']!),
+                        selected: selected,
+                        onSelected: (val) {
+                          setState(() {
+                            if (val) {
+                              _selectedCrops.add(crop['key']!);
+                            } else {
+                              _selectedCrops.remove(crop['key']!);
+                            }
+                          });
+                        },
+                        selectedColor: Colors.green.shade200,
+                        checkmarkColor: Colors.green.shade800,
+                        labelStyle: TextStyle(
+                          color: selected ? Colors.green.shade800 : Colors.black87,
+                          fontWeight: selected ? FontWeight.bold : FontWeight.normal,
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  if (_selectedCrops.isNotEmpty) ...[
+                    const SizedBox(height: 8),
+                    Text(
+                      'Selected: ${_selectedCrops.map((c) => _cropOptions.firstWhere((opt) => opt['key'] == c)['label']).join(', ')}',
+                      style: TextStyle(
+                        color: Colors.green.shade700,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
             DropdownButtonFormField<String>(
               value: _preferredLanguage,
               decoration: InputDecoration(labelText: 'Preferred Language'),

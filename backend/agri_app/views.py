@@ -10,8 +10,26 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import MultiPartParser, FormParser
-from .models import Item, UserProfile, Booking
+from .models import Item, UserProfile, Booking, CROP_CHOICES
 from rest_framework import serializers
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    crops_list = serializers.SerializerMethodField()
+    class Meta:
+        model = UserProfile
+        fields = ['name', 'phone', 'city', 'address', 'preferred_language', 'crops', 'crops_list']
+    def get_crops_list(self, obj):
+        return obj.get_crops_list()
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    try:
+        profile = request.user.profile
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
+    except UserProfile.DoesNotExist:
+        return Response({'error': 'Profile not found'}, status=404)
 
 @api_view(['POST'])
 def register_user(request):
@@ -58,12 +76,13 @@ def register(request):
     city = request.data.get('city')
     address = request.data.get('address')
     preferred_language = request.data.get('preferred_language')
+    crops = request.data.get('crops', [])  # expect a list of crop keys
 
     if User.objects.filter(username=username).exists():
         return Response({'error': 'Username already exists'}, status=400)
 
     user = User.objects.create_user(username=username, password=password, email=email)
-    UserProfile.objects.create(
+    profile = UserProfile.objects.create(
         user=user,
         name=name or '',
         phone=phone or '',
@@ -71,6 +90,9 @@ def register(request):
         address=address or '',
         preferred_language=preferred_language or 'English',
     )
+    if isinstance(crops, list):
+        profile.set_crops_list(crops)
+        profile.save()
     token = Token.objects.create(user=user)
 
     return Response({'token': token.key, 'username': user.username})

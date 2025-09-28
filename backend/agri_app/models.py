@@ -27,6 +27,14 @@ class Item(models.Model):
         return f"{self.item_type}: {self.name} by {self.owner}"
 
 
+CROP_CHOICES = [
+    ('rice', 'Rice'),
+    ('wheat', 'Wheat'),
+    ('apple', 'Apple'),
+    ('tomato', 'Tomato'),
+    ('potato', 'Potato'),
+]
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     name = models.CharField(max_length=255)
@@ -34,6 +42,13 @@ class UserProfile(models.Model):
     city = models.CharField(max_length=100)
     address = models.TextField()
     preferred_language = models.CharField(max_length=20, choices=[('English', 'English'), ('Hindi', 'Hindi'), ('Marathi', 'Marathi')])
+    crops = models.CharField(max_length=255, blank=True, default='')  # comma-separated crop keys
+
+    def get_crops_list(self):
+        return [c for c in self.crops.split(',') if c]
+
+    def set_crops_list(self, crops_list):
+        self.crops = ','.join(crops_list)
 
     def __str__(self):
         return f"Profile of {self.user.username}"
