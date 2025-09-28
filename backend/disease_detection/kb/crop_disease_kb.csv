@@ -1,0 +1,27 @@
+disease_name,crop,symptom_description,affected_part,type,stage,treatment,prevention,language
+Rice Blast,rice,brown spots on rice leaves,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
+Rice Blast,rice,rice leaves drying with brown patches,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
+Rice Blast,rice,leaves with brown spots,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
+Rice Blast,rice,brown circles on leaves,leaf,disease,early,Fungicide XYZ,Avoid excess nitrogen,en
+Nitrogen Deficiency,wheat,yellowing of wheat leaves,leaf,nutrient,any,Apply N fertilizer,Regular soil testing,en
+Nitrogen Deficiency,wheat,pale leaves and stunted wheat growth,leaf,nutrient,any,Apply N fertilizer,Regular soil testing,en
+Nitrogen Deficiency,wheat,leaves turning yellow stunted growth,leaf,nutrient,any,Apply N fertilizer,Regular soil testing,en
+Potato Early Blight,potato,circular brown spots with concentric rings on leaves,leaf,disease,early,Fungicide ABC,Remove infected leaves,en
+Potato Early Blight,potato,target-like dark spots spreading on potato leaves,leaf,disease,early,Fungicide ABC,Remove infected leaves,en
+Potato Early Blight,potato,leaves with brown round spots,leaf,disease,early,Fungicide ABC,Remove infected leaves,en
+Potato Late Blight,potato,irregular water-soaked brown lesions on leaves,leaf,disease,any,Fungicide DEF,Avoid wet conditions,en
+Potato Late Blight,potato,leaves look oily or wet with irregular brown areas,leaf,disease,any,Fungicide DEF,Avoid wet conditions,en
+Powdery Mildew,potato,white powdery coating on upper surface of leaves,leaf,disease,any,Apply fungicide ABC,Avoid high humidity,en
+Powdery Mildew,potato,leaves appear dusted with flour-like substance,leaf,disease,any,Apply fungicide ABC,Avoid high humidity,en
+Powdery Mildew,potato,leaves covered with white powder,leaf,disease,any,Apply fungicide ABC,Avoid high humidity,en
+Downy Mildew,cucumber,fuzzy growth on underside of leaves with yellow patches above,leaf,disease,any,Apply fungicide GHI,Avoid high humidity,en
+Downy Mildew,cucumber,grayish mold on the lower leaf surface,leaf,disease,any,Apply fungicide GHI,Avoid high humidity,en
+Maize Streak Virus,maize,yellow patches on maize leaves,leaf,disease,any,Remove infected plants,Use resistant varieties,en
+Maize Streak Virus,maize,striped yellowing on maize leaves,leaf,disease,any,Remove infected plants,Use resistant varieties,en
+Tomato Leaf Curl Virus,tomato,tomato leaves curling and yellowing,leaf,disease,any,Remove infected plants,Use resistant varieties,en
+Tomato Leaf Curl Virus,tomato,small leaves and stunted tomato growth,leaf,disease,any,Remove infected plants,Use resistant varieties,en
+Tomato Leaf Curl Virus,tomato,leaves curling yellowing,leaf,disease,any,Remove infected plants,Use resistant varieties,en
+Phosphorus Deficiency,maize,dark green leaves with purple tinge,leaf,nutrient,any,Apply P fertilizer,Regular soil testing,en
+Phosphorus Deficiency,maize,maize plants with purple stems and leaves,leaf,nutrient,any,Apply P fertilizer,Regular soil testing,en
+Potassium Deficiency,potato,leaf edges turning brown and curling,leaf,nutrient,any,Apply K fertilizer,Regular soil testing,en
+Potassium Deficiency,potato,edges of leaf browning curling,leaf,nutrient,any,Apply K fertilizer,Regular soil testing,en
