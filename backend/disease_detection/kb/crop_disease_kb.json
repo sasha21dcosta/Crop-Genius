@@ -3,13 +3,23 @@
     "crop_name": "Rice",
     "disease_name": "Rice Blast",
     "symptoms": [
-      "Brown spots on rice leaves",
-      "Rice leaves drying with brown patches",
-      "Leaves with brown spots and yellow halos",
-      "Brown circular lesions on leaves",
-      "Leaf spots with gray centers",
-      "Diamond-shaped lesions",
-      "Lesions spreading to stems and panicles"
+      "Brown diamond-shaped or oval lesions with gray centers",
+    "Spots merge and cause leaves to dry out",
+    "Lesions may appear on leaves, stems, and panicles",
+    "There are brown spots on the rice leaves that are white in the center",
+    "The leaves are drying from the tip",
+    "I see small brown patches on the leaves that are getting bigger",
+    "The leaves look burnt or damaged",
+    "There are round marks on the leaves that are spreading",
+    "The leaves have cut-like marks and are turning yellow",
+    "After rain, more spots are showing on the plants",
+    "The top part of the leaf is dry but the bottom is still green",
+    "Some stems also have brown spots now",
+    "Leaves have white patches in the middle and brown borders",
+    "There are long brown marks on the leaves turning white in the middle",
+    "The spots have white centers and dark edges",
+    "Leaves break easily where the spots are",
+    "Some leaves have holes where the brown marks were"
     ],
     "causes": "Fungal infection caused by Magnaporthe oryzae, thrives in high humidity and warm temperatures (25-28°C)",
     "treatment": "Apply Tricyclazole fungicide at 0.6g per liter. Spray twice: at tillering and booting stage. Alternative: Carbendazim or Edifenphos",
@@ -31,36 +41,7 @@
       "Are your plants closely spaced?"
     ]
   },
-  {
-    "crop_name": "Rice",
-    "disease_name": "Rice Brown Spot",
-    "symptoms": [
-      "Small brown spots on leaves",
-      "Oval brown lesions on rice leaves",
-      "Dark brown spots with light centers",
-      "Numerous small brown spots scattered on leaves",
-      "Spots on grain causing discoloration"
-    ],
-    "causes": "Fungal infection by Bipolaris oryzae (Helminthosporium oryzae), common in nutrient-deficient soils, especially low potassium",
-    "treatment": "Apply Mancozeb spray at 2g per liter or Copper oxychloride. Spray at 10-day intervals. Apply potassium fertilizer to strengthen plants",
-    "prevention": "Use certified disease-free seeds, treat seeds with Thiram or Carbendazim, ensure balanced fertilization (especially potassium), avoid water stress",
-    "severity_level": "Medium",
-    "risk_season": "Throughout growing season, especially in nutrient-poor soils",
-    "affected_parts": ["Leaves", "Leaf sheaths", "Panicles", "Grains"],
-    "related_pests": ["Rice bugs can worsen damage"],
-    "symptom_questions": [
-      "Are the spots oval-shaped with light brown centers?",
-      "Do you see spots on both leaves and grains?",
-      "Are the spots more numerous on older leaves?",
-      "Is the soil in your field nutrient-poor?"
-    ],
-    "contextual_followups": [
-      "Have you done soil testing recently?",
-      "Did you use treated seeds for planting?",
-      "Is your field well-drained?",
-      "Have you noticed slow plant growth?"
-    ]
-  },
+
   {
     "crop_name": "Rice",
     "disease_name": "Rice Sheath Blight",
@@ -70,7 +51,15 @@
       "Greenish-gray lesions with brown margins",
       "Water-soaked lesions on lower sheaths",
       "White fungal growth in humid conditions",
-      "Lesions spreading upward from water level"
+      "Lesions spreading upward from water level",
+
+      "The lower part of the plant near the water is turning brown and soft",
+    "There are wet patches on the leaf stems close to the ground",
+     "The stems have brown lines and spots that are spreading upward",
+     "The plants are falling down because the base is getting weak",
+    "The disease starts from the bottom and moves up slowly",
+    "It looks like the plant is rotting from the bottom",
+    "greenish-grey spots on leaf sheaths near water level"
     ],
     "causes": "Fungal infection by Rhizoctonia solani, favored by dense planting, high nitrogen, and standing water",
     "treatment": "Apply Validamycin at 2ml per liter or Hexaconazole. Spray at early tillering and again 15 days later. Drain water temporarily during treatment",

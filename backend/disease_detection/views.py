@@ -17,7 +17,7 @@ import requests
 from .models import ChatSession, ChatMessage
 from django.shortcuts import get_object_or_404
 
-COLAB_API_URL = "https://e51ac7538983.ngrok-free.app"  # UPDATE with your own Colab ngrok URL (no /api/transcribe suffix)
+COLAB_API_URL = "https://26954b8d4135.ngrok-free.app"  # UPDATE with your own Colab ngrok URL (no /api/transcribe suffix)
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))

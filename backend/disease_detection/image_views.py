@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 # CONFIGURATION
 # ========================================
 # Replace with your Colab ngrok URL when running
-COLAB_IMAGE_API_URL = "https://89cf407227c9.ngrok-free.app/diagnose"
+COLAB_IMAGE_API_URL = "https://e58788b17e4e.ngrok-free.app/diagnose"
 
 # You can also use environment variable:
 import os
