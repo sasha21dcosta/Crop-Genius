@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'disease_detection',
+    'crop_recommendation',
 ]
 
 MIDDLEWARE = [

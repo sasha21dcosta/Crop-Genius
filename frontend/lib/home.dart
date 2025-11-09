@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'marketplace.dart';
 import 'auth_service.dart';
 import 'diagnosis_chat.dart';
+import 'crop_recommendation.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
             ),
             const SizedBox(height: 30),
             _featureCard(context, Icons.eco, 'Symptom Input AI diagnosis'),
-            _featureCard(context, Icons.cloud, ' Crop Suggestions'),
+            _featureCard(context, Icons.agriculture, 'Crop Recommendation'),
             _featureCard(context, Icons.shopping_cart, 'Marketplace and Equipment Rental'),
             _featureCard(context, Icons.support, 'real-time crop prices'),
             const SizedBox(height: 30),
@@ -196,6 +197,11 @@ class _HomePageState extends State<HomePage> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (_) => const DiagnosisChatScreen()),
+            );
+          } else if (title == 'Crop Recommendation') {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const CropRecommendationScreen()),
             );
           } else if (title == 'Marketplace and Equipment Rental') {
             Navigator.push(

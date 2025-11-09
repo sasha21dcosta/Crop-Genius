@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('agri_app.urls')),  # add this
     path('api/disease/', include('disease_detection.urls')),
+    path('api/crop/', include('crop_recommendation.urls')),
 ]
 
 if settings.DEBUG:

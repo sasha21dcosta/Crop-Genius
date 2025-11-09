@@ -1,0 +1,21 @@
+{
+  "model_name": "xgboost",
+  "accuracy": 0.9931818181818182,
+  "feature_names": [
+    "N",
+    "P",
+    "K",
+    "temperature",
+    "humidity",
+    "ph",
+    "rainfall",
+    "N_P_ratio",
+    "N_K_ratio",
+    "P_K_ratio",
+    "temp_humidity",
+    "temp_rainfall",
+    "soil_quality"
+  ],
+  "timestamp": "20251007_174827",
+  "version": "2.0"
+}
