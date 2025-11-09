@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'disease_detection',
     'crop_recommendation',
+    'weather_alerts',
+    'crop_prices',
 ]
 
 MIDDLEWARE = [

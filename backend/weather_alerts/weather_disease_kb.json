@@ -1,0 +1,205 @@
+[
+  {
+    "disease_name": "Early Blight",
+    "crop_name": "tomato",
+    "risk_conditions": {
+      "min_humidity": 70,
+      "max_temp": 32,
+      "min_temp": 20,
+      "alert": "High humidity and warm temperatures detected — tomatoes may be at risk of Early Blight. Monitor plants closely for dark spots on leaves."
+    }
+  },
+  {
+    "disease_name": "Late Blight",
+    "crop_name": "tomato",
+    "risk_conditions": {
+      "min_humidity": 75,
+      "min_rainfall": 5,
+      "max_temp": 25,
+      "alert": "Cool, wet conditions favor Late Blight development in tomatoes. Check for water-soaked lesions on leaves and stems."
+    }
+  },
+  {
+    "disease_name": "Late Blight",
+    "crop_name": "potato",
+    "risk_conditions": {
+      "min_humidity": 75,
+      "min_rainfall": 5,
+      "max_temp": 25,
+      "alert": "Cool, wet conditions increase the risk of Late Blight in potatoes. Inspect plants for white fungal growth and dark lesions."
+    }
+  },
+  {
+    "disease_name": "Rice Blast",
+    "crop_name": "rice",
+    "risk_conditions": {
+      "min_humidity": 80,
+      "min_rainfall": 10,
+      "alert": "Heavy rainfall and high humidity significantly increase the risk of Rice Blast infection. Look for diamond-shaped lesions on leaves."
+    }
+  },
+  {
+    "disease_name": "Bacterial Leaf Blight",
+    "crop_name": "rice",
+    "risk_conditions": {
+      "min_humidity": 75,
+      "min_temp": 25,
+      "min_rainfall": 5,
+      "alert": "Warm, humid, and rainy conditions favor Bacterial Leaf Blight in rice. Watch for yellow-to-white lesions on leaf margins."
+    }
+  },
+  {
+    "disease_name": "Powdery Mildew",
+    "crop_name": "wheat",
+    "risk_conditions": {
+      "min_humidity": 65,
+      "min_temp": 15,
+      "max_temp": 22,
+      "alert": "Moderate temperatures and humidity create ideal conditions for Powdery Mildew on wheat. Check for white powdery patches on leaves."
+    }
+  },
+  {
+    "disease_name": "Rust",
+    "crop_name": "wheat",
+    "risk_conditions": {
+      "min_humidity": 70,
+      "min_temp": 15,
+      "max_temp": 25,
+      "min_rainfall": 3,
+      "alert": "Warm temperatures with moisture promote Rust disease in wheat. Look for orange-brown pustules on leaves and stems."
+    }
+  },
+  {
+    "disease_name": "Downy Mildew",
+    "crop_name": "apple",
+    "risk_conditions": {
+      "min_humidity": 75,
+      "min_rainfall": 5,
+      "max_temp": 25,
+      "alert": "Cool and wet conditions increase the risk of Downy Mildew in apples. Inspect for pale green to yellow spots on leaves."
+    }
+  },
+  {
+    "disease_name": "Fire Blight",
+    "crop_name": "apple",
+    "risk_conditions": {
+      "min_humidity": 60,
+      "min_temp": 18,
+      "max_temp": 29,
+      "min_rainfall": 2,
+      "alert": "Warm, moist conditions during bloom favor Fire Blight in apples. Look for blackened, scorched-looking shoots and flowers."
+    }
+  },
+  {
+    "disease_name": "Anthracnose",
+    "crop_name": "maize",
+    "risk_conditions": {
+      "min_humidity": 70,
+      "min_rainfall": 8,
+      "min_temp": 20,
+      "alert": "Warm temperatures with heavy rainfall increase Anthracnose risk in maize. Check for irregular brown lesions on leaves."
+    }
+  },
+  {
+    "disease_name": "Southern Corn Leaf Blight",
+    "crop_name": "maize",
+    "risk_conditions": {
+      "min_humidity": 75,
+      "min_temp": 25,
+      "min_rainfall": 5,
+      "alert": "Hot and humid conditions with rain promote Southern Corn Leaf Blight. Look for long, tan lesions on leaves."
+    }
+  },
+  {
+    "disease_name": "Bacterial Wilt",
+    "crop_name": "chickpea",
+    "risk_conditions": {
+      "min_humidity": 70,
+      "min_temp": 25,
+      "max_temp": 35,
+      "alert": "Hot and humid weather increases Bacterial Wilt risk in chickpea. Watch for sudden wilting of plants."
+    }
+  },
+  {
+    "disease_name": "Ascochyta Blight",
+    "crop_name": "chickpea",
+    "risk_conditions": {
+      "min_humidity": 80,
+      "min_rainfall": 10,
+      "max_temp": 25,
+      "alert": "Cool and wet conditions favor Ascochyta Blight in chickpea. Look for brown spots with dark margins on leaves and pods."
+    }
+  },
+  {
+    "disease_name": "Fusarium Wilt",
+    "crop_name": "kidneybeans",
+    "risk_conditions": {
+      "min_temp": 25,
+      "max_temp": 35,
+      "min_humidity": 60,
+      "alert": "Warm conditions increase Fusarium Wilt risk in kidney beans. Watch for yellowing and wilting of lower leaves."
+    }
+  },
+  {
+    "disease_name": "Angular Leaf Spot",
+    "crop_name": "kidneybeans",
+    "risk_conditions": {
+      "min_humidity": 75,
+      "min_rainfall": 5,
+      "max_temp": 28,
+      "alert": "Wet and moderately warm conditions promote Angular Leaf Spot in kidney beans. Look for angular brown spots on leaves."
+    }
+  },
+  {
+    "disease_name": "Cercospora Leaf Spot",
+    "crop_name": "pigeonpeas",
+    "risk_conditions": {
+      "min_humidity": 70,
+      "min_temp": 20,
+      "max_temp": 30,
+      "min_rainfall": 5,
+      "alert": "Warm humid conditions with rain favor Cercospora Leaf Spot in pigeon peas. Check for circular brown spots on leaves."
+    }
+  },
+  {
+    "disease_name": "Powdery Mildew",
+    "crop_name": "mothbeans",
+    "risk_conditions": {
+      "min_humidity": 65,
+      "min_temp": 20,
+      "max_temp": 30,
+      "alert": "Moderate temperatures with high humidity create conditions for Powdery Mildew on moth beans. Look for white powdery growth."
+    }
+  },
+  {
+    "disease_name": "Yellow Mosaic Virus",
+    "crop_name": "mungbean",
+    "risk_conditions": {
+      "min_temp": 25,
+      "max_temp": 35,
+      "min_humidity": 50,
+      "alert": "Hot and dry-to-moderate humidity conditions favor whitefly activity, spreading Yellow Mosaic Virus in mung beans."
+    }
+  },
+  {
+    "disease_name": "Web Blight",
+    "crop_name": "blackgram",
+    "risk_conditions": {
+      "min_humidity": 80,
+      "min_rainfall": 10,
+      "min_temp": 25,
+      "alert": "Heavy rain and high humidity increase Web Blight risk in black gram. Look for web-like fungal growth on plants."
+    }
+  },
+  {
+    "disease_name": "Leaf Spot",
+    "crop_name": "lentil",
+    "risk_conditions": {
+      "min_humidity": 70,
+      "min_rainfall": 5,
+      "max_temp": 25,
+      "alert": "Cool and humid conditions with rain favor Leaf Spot diseases in lentils. Monitor for brown or gray spots on leaves."
+    }
+  }
+]
+

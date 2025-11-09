@@ -1,0 +1,468 @@
+[
+  {
+    "crop_name": "Rice",
+    "disease_name": "Rice Blast",
+    "symptoms": [
+      "Brown spots on rice leaves",
+      "Rice leaves drying with brown patches",
+      "Leaves with brown spots and yellow halos",
+      "Brown circular lesions on leaves",
+      "Leaf spots with gray centers",
+      "Diamond-shaped lesions",
+      "Lesions spreading to stems and panicles"
+    ],
+    "causes": "Fungal infection caused by Magnaporthe oryzae, thrives in high humidity and warm temperatures (25-28°C)",
+    "treatment": "Apply Tricyclazole fungicide at 0.6g per liter. Spray twice: at tillering and booting stage. Alternative: Carbendazim or Edifenphos",
+    "prevention": "Use resistant varieties like IR64, avoid excessive nitrogen fertilizer, maintain proper plant spacing, remove infected debris, ensure good drainage",
+    "severity_level": "High",
+    "risk_season": "Monsoon season and periods of high humidity (>85%)",
+    "affected_parts": ["Leaves", "Stems", "Panicles", "Nodes"],
+    "related_pests": ["Brown planthopper - can spread disease"],
+    "symptom_questions": [
+      "Do you see diamond or spindle-shaped spots on leaves?",
+      "Are the spots brown with gray centers?",
+      "Have the lesions spread to the stem or neck area?",
+      "Are young leaves more affected than old ones?"
+    ],
+    "contextual_followups": [
+      "Has there been heavy rainfall or high humidity recently?",
+      "Did you apply nitrogen fertilizer heavily?",
+      "Is this happening during the flowering stage?",
+      "Are your plants closely spaced?"
+    ]
+  },
+  {
+    "crop_name": "Rice",
+    "disease_name": "Rice Brown Spot",
+    "symptoms": [
+      "Small brown spots on leaves",
+      "Oval brown lesions on rice leaves",
+      "Dark brown spots with light centers",
+      "Numerous small brown spots scattered on leaves",
+      "Spots on grain causing discoloration"
+    ],
+    "causes": "Fungal infection by Bipolaris oryzae (Helminthosporium oryzae), common in nutrient-deficient soils, especially low potassium",
+    "treatment": "Apply Mancozeb spray at 2g per liter or Copper oxychloride. Spray at 10-day intervals. Apply potassium fertilizer to strengthen plants",
+    "prevention": "Use certified disease-free seeds, treat seeds with Thiram or Carbendazim, ensure balanced fertilization (especially potassium), avoid water stress",
+    "severity_level": "Medium",
+    "risk_season": "Throughout growing season, especially in nutrient-poor soils",
+    "affected_parts": ["Leaves", "Leaf sheaths", "Panicles", "Grains"],
+    "related_pests": ["Rice bugs can worsen damage"],
+    "symptom_questions": [
+      "Are the spots oval-shaped with light brown centers?",
+      "Do you see spots on both leaves and grains?",
+      "Are the spots more numerous on older leaves?",
+      "Is the soil in your field nutrient-poor?"
+    ],
+    "contextual_followups": [
+      "Have you done soil testing recently?",
+      "Did you use treated seeds for planting?",
+      "Is your field well-drained?",
+      "Have you noticed slow plant growth?"
+    ]
+  },
+  {
+    "crop_name": "Rice",
+    "disease_name": "Rice Sheath Blight",
+    "symptoms": [
+      "Lesions on leaf sheaths near water line",
+      "Oval to irregular lesions on sheaths",
+      "Greenish-gray lesions with brown margins",
+      "Water-soaked lesions on lower sheaths",
+      "White fungal growth in humid conditions",
+      "Lesions spreading upward from water level"
+    ],
+    "causes": "Fungal infection by Rhizoctonia solani, favored by dense planting, high nitrogen, and standing water",
+    "treatment": "Apply Validamycin at 2ml per liter or Hexaconazole. Spray at early tillering and again 15 days later. Drain water temporarily during treatment",
+    "prevention": "Maintain proper plant spacing (20x15 cm), avoid excessive nitrogen, drain fields periodically, use silicon fertilizers to strengthen cell walls",
+    "severity_level": "High",
+    "risk_season": "Peak tillering to heading stage, especially in humid conditions",
+    "affected_parts": ["Leaf sheaths", "Culms", "Leaves in severe cases"],
+    "related_pests": ["None directly, but water management issues worsen disease"],
+    "symptom_questions": [
+      "Do you see oval lesions starting from the water line?",
+      "Are the lesions greenish-gray with brown edges?",
+      "Do you notice white fungal growth in the morning?",
+      "Are your plants densely planted?"
+    ],
+    "contextual_followups": [
+      "Is water standing continuously in your field?",
+      "Did you apply high amounts of nitrogen fertilizer?",
+      "What is your plant spacing?",
+      "Have you seen this disease before in this field?"
+    ]
+  },
+  {
+    "crop_name": "Wheat",
+    "disease_name": "Wheat Rust",
+    "symptoms": [
+      "Orange-red pustules on wheat leaves",
+      "Rust-colored spots on leaf surface",
+      "Reddish-brown powdery spots on leaves",
+      "Orange pustules breaking through leaf surface",
+      "Rust-colored powder on wheat leaves",
+      "Pustules on stems and leaf sheaths"
+    ],
+    "causes": "Fungal infection by Puccinia species (P. triticina for leaf rust, P. striiformis for stripe rust, P. graminis for stem rust). Spreads rapidly in moderate temperatures",
+    "treatment": "Apply Propiconazole at 0.1% or Tebuconazole at 0.1%. For severe cases, use Mancozeb + Metalaxyl. Spray at flag leaf emergence and repeat after 15 days",
+    "prevention": "Use resistant varieties (HD 2967, PBW 550), practice crop rotation, remove volunteer wheat plants, timely sowing to avoid peak rust season",
+    "severity_level": "High",
+    "risk_season": "Late winter to spring (February-March), temperatures 15-25°C with dew",
+    "affected_parts": ["Leaves", "Stems", "Leaf sheaths", "Glumes"],
+    "related_pests": ["Aphids can spread rust spores"],
+    "symptom_questions": [
+      "Are the pustules orange-red or yellowish-orange?",
+      "Do you see rust-colored powder on your hands after touching leaves?",
+      "Are the pustules arranged in lines or scattered randomly?",
+      "Have you noticed pustules on the stem as well?"
+    ],
+    "contextual_followups": [
+      "Did you notice dew formation in the morning?",
+      "What variety of wheat are you growing?",
+      "Have neighboring fields been affected?",
+      "When did you sow this crop?"
+    ]
+  },
+  {
+    "crop_name": "Wheat",
+    "disease_name": "Wheat Powdery Mildew",
+    "symptoms": [
+      "White powdery coating on leaves",
+      "White dusty patches on wheat leaves",
+      "Flour-like white coating on leaves",
+      "White fungal growth on leaf surface",
+      "Yellowing of affected leaves",
+      "Premature leaf senescence"
+    ],
+    "causes": "Fungal infection by Blumeria graminis f. sp. tritici. Thrives in cool, humid conditions with poor air circulation",
+    "treatment": "Apply Sulfur fungicide at 2g per liter or Triadimefon at 0.1%. Alternatively, use Hexaconazole. Spray at disease onset and repeat after 10-15 days",
+    "prevention": "Avoid overcrowding plants, use resistant varieties, avoid excessive nitrogen, ensure good air circulation, timely removal of infected plants",
+    "severity_level": "Medium",
+    "risk_season": "Late winter (January-February) with high humidity and moderate temperatures (15-22°C)",
+    "affected_parts": ["Leaves", "Leaf sheaths", "Stems", "Ears in severe cases"],
+    "related_pests": ["None directly associated"],
+    "symptom_questions": [
+      "Do you see white powder that rubs off easily?",
+      "Are the lower leaves more affected?",
+      "Is the coating on both sides of leaves?",
+      "Have you noticed yellowing of affected areas?"
+    ],
+    "contextual_followups": [
+      "Is your field in a shaded or poorly ventilated area?",
+      "Did you plant wheat very densely?",
+      "Has the weather been cool and humid?",
+      "Have you used high nitrogen fertilizers?"
+    ]
+  },
+  {
+    "crop_name": "Wheat",
+    "disease_name": "Wheat Leaf Blight",
+    "symptoms": [
+      "Brown lesions on wheat leaves",
+      "Elongated brown spots on leaves",
+      "Tan to brown lesions with dark borders",
+      "Brown blotches spreading on leaves",
+      "Leaf tips turning brown and dying",
+      "Premature drying of leaves"
+    ],
+    "causes": "Fungal infection by Bipolaris sorokiniana (spot blotch) or Alternaria triticina. Common in warm, humid conditions and stressed plants",
+    "treatment": "Apply Copper fungicide (Copper oxychloride at 3g per liter) or Mancozeb. For severe cases, use Propiconazole. Spray at tillering and booting stage",
+    "prevention": "Practice crop rotation with non-cereals, use healthy seeds, avoid water logging, maintain balanced nutrition, remove crop residues after harvest",
+    "severity_level": "Medium to High",
+    "risk_season": "Late season (grain filling stage), warm and humid conditions",
+    "affected_parts": ["Leaves", "Leaf sheaths", "Glumes", "Grains"],
+    "related_pests": ["None directly, but heat stress worsens symptoms"],
+    "symptom_questions": [
+      "Are the lesions elongated with dark margins?",
+      "Do you see the disease starting from lower leaves?",
+      "Are the leaf tips dying back?",
+      "Has the disease reached the grain heads?"
+    ],
+    "contextual_followups": [
+      "What was your previous crop in this field?",
+      "Is the field well-drained?",
+      "Have temperatures been high recently?",
+      "Did you face water stress during grain filling?"
+    ]
+  },
+  {
+    "crop_name": "Apple",
+    "disease_name": "Apple Scab",
+    "symptoms": [
+      "Dark scabby lesions on apple leaves",
+      "Olive-green to black spots on leaves",
+      "Velvety dark spots on apple leaves",
+      "Black sooty spots on leaf surface",
+      "Dark circular lesions on leaves",
+      "Cracked and deformed fruits"
+    ],
+    "causes": "Fungal infection by Venturia inaequalis. Overwinters in fallen leaves, spreads via rain splash in spring",
+    "treatment": "Apply Captan fungicide at 2g per liter or Mancozeb. For organic: use Sulfur or Copper-based fungicides. Begin at green tip stage, repeat every 7-14 days",
+    "prevention": "Remove and destroy fallen leaves in fall, use resistant varieties (Liberty, Enterprise), prune for good air circulation, avoid overhead irrigation",
+    "severity_level": "High",
+    "risk_season": "Spring (April-June) during wet weather, primary infection from overwintered spores",
+    "affected_parts": ["Leaves", "Fruits", "Young shoots"],
+    "related_pests": ["None directly, but wounds from insects can allow entry"],
+    "symptom_questions": [
+      "Do you see olive-green or black velvety spots?",
+      "Are both leaves and fruits affected?",
+      "Did the spots appear after rain?",
+      "Are the fruits cracked or deformed?"
+    ],
+    "contextual_followups": [
+      "Did you remove fallen leaves last autumn?",
+      "Has there been frequent rain in spring?",
+      "What apple variety are you growing?",
+      "Do you use overhead sprinklers?"
+    ]
+  },
+  {
+    "crop_name": "Apple",
+    "disease_name": "Apple Fire Blight",
+    "symptoms": [
+      "Blackened wilted shoots and leaves",
+      "Burnt appearance of apple branches",
+      "Blackened leaves that stay attached",
+      "Shepherd's crook bending of shoots",
+      "Oozing cankers on branches",
+      "Sudden wilting during bloom"
+    ],
+    "causes": "Bacterial infection by Erwinia amylovora. Enters through blossoms, spreads rapidly in warm, humid weather. Highly contagious",
+    "treatment": "Apply Streptomycin spray during bloom (200 ppm). Prune infected branches 12 inches below symptoms. Disinfect tools with 10% bleach between cuts. Apply Copper spray during dormancy",
+    "prevention": "Prune infected branches immediately, avoid excessive nitrogen, use resistant rootstocks, plant resistant varieties (Liberty, Enterprise), remove infected trees if severe",
+    "severity_level": "Very High - Can kill trees",
+    "risk_season": "Spring during flowering, warm weather (18-30°C) with rain or high humidity",
+    "affected_parts": ["Blossoms", "Shoots", "Branches", "Trunk", "Entire tree in severe cases"],
+    "related_pests": ["Bees and insects can spread bacteria during pollination"],
+    "symptom_questions": [
+      "Do the shoots look burnt or blackened?",
+      "Are the branch tips curled like a shepherd's crook?",
+      "Did you notice sudden wilting during or after flowering?",
+      "Is there sticky ooze on the branches?"
+    ],
+    "contextual_followups": [
+      "Did the symptoms appear during or after bloom?",
+      "Was there rain or hail during flowering?",
+      "Have you seen this in your orchard before?",
+      "How quickly did the symptoms spread?"
+    ]
+  },
+  {
+    "crop_name": "Apple",
+    "disease_name": "Apple Powdery Mildew",
+    "symptoms": [
+      "White powdery coating on apple leaves",
+      "Silvery-white patches on leaves",
+      "White fungal growth on leaf surface",
+      "Dusty white coating on apple leaves",
+      "Leaf curling and distortion",
+      "Stunted shoot growth"
+    ],
+    "causes": "Fungal infection by Podosphaera leucotricha. Overwinters in buds, emerges in spring, favored by moderate temperatures and low humidity",
+    "treatment": "Apply Myclobutanil at 0.04% or Sulfur at 0.2%. For organic: use Potassium bicarbonate. Spray at pink bud stage and repeat every 10-14 days until petal fall",
+    "prevention": "Prune infected shoots in winter, improve air circulation, use resistant varieties, avoid excessive nitrogen, remove diseased terminal buds",
+    "severity_level": "Medium",
+    "risk_season": "Spring to early summer, moderate temperatures (20-25°C), low humidity paradoxically favors it",
+    "affected_parts": ["Leaves", "Shoots", "Blossoms", "Young fruits"],
+    "related_pests": ["None directly associated"],
+    "symptom_questions": [
+      "Do you see white powdery coating on new growth?",
+      "Are the leaves curled or distorted?",
+      "Is the white coating on both sides of leaves?",
+      "Are the shoots stunted or rosette-like?"
+    ],
+    "contextual_followups": [
+      "Did you notice this on last season's terminal growth?",
+      "Is your orchard well-pruned with good air flow?",
+      "Have temperatures been moderate (not too hot)?",
+      "Did you remove infected shoots during winter pruning?"
+    ]
+  },
+  {
+    "crop_name": "Tomato",
+    "disease_name": "Tomato Early Blight",
+    "symptoms": [
+      "Dark spots with concentric rings on leaves",
+      "Target-like lesions on tomato leaves",
+      "Brown spots with yellow halos on leaves",
+      "Circular brown lesions on lower leaves",
+      "Bull's eye pattern spots on leaves",
+      "Leaf yellowing and defoliation"
+    ],
+    "causes": "Fungal infection by Alternaria solani. Survives in crop debris, spreads via rain splash, favored by warm humid weather",
+    "treatment": "Apply Chlorothalonil at 2g per liter or Mancozeb. Alternatively, use Azoxystrobin. Spray at first sign of disease, repeat every 7-10 days. Remove severely infected leaves",
+    "prevention": "Remove infected plant debris, practice crop rotation (3-4 years), avoid overhead irrigation, mulch to prevent soil splash, stake plants for air circulation, use resistant varieties",
+    "severity_level": "Medium",
+    "risk_season": "Throughout growing season, especially after fruit set, warm days with humid nights",
+    "affected_parts": ["Lower leaves initially", "Stems", "Fruits", "Spreads upward"],
+    "related_pests": ["Flea beetles can create entry points"],
+    "symptom_questions": [
+      "Do you see target-like or bull's eye patterns on leaves?",
+      "Did the disease start on lower leaves?",
+      "Are the spots dark brown with yellow halos?",
+      "Have leaves started falling off?"
+    ],
+    "contextual_followups": [
+      "Did you practice crop rotation?",
+      "Is there old tomato debris in or near the field?",
+      "Do you water from overhead or at soil level?",
+      "Has the weather been warm and humid?"
+    ]
+  },
+  {
+    "crop_name": "Tomato",
+    "disease_name": "Tomato Late Blight",
+    "symptoms": [
+      "Water-soaked lesions on tomato leaves",
+      "Dark green water-soaked spots on leaves",
+      "Brown lesions with white fuzzy growth",
+      "Rapidly spreading brown patches on leaves",
+      "Brown firm spots on fruits",
+      "Entire plant collapse in severe cases"
+    ],
+    "causes": "Oomycete pathogen Phytophthora infestans (same as potato late blight). Spreads rapidly via wind and rain, highly destructive",
+    "treatment": "Apply Metalaxyl + Mancozeb or Cymoxanil + Mancozeb at first sign. Spray every 5-7 days. In severe cases, destroy infected plants. Apply Copper as preventive",
+    "prevention": "Avoid overhead watering, ensure good air circulation, use resistant varieties, destroy volunteer plants, separate from potato crops, apply preventive fungicides in high-risk periods",
+    "severity_level": "Very High - Can destroy entire crop quickly",
+    "risk_season": "Cool moist weather (15-20°C), high humidity, especially during monsoon",
+    "affected_parts": ["Leaves", "Stems", "Fruits", "Entire plant"],
+    "related_pests": ["None, but can co-occur with aphids"],
+    "symptom_questions": [
+      "Are there water-soaked spots on leaves?",
+      "Do you see white fuzzy mold on undersides of leaves?",
+      "Are brown spots appearing on fruits?",
+      "Did the disease spread very rapidly?"
+    ],
+    "contextual_followups": [
+      "Has the weather been cool and moist recently?",
+      "Are there potato plants nearby?",
+      "Did you notice this after rain or heavy dew?",
+      "How fast did the symptoms spread?"
+    ]
+  },
+  {
+    "crop_name": "Tomato",
+    "disease_name": "Tomato Bacterial Wilt",
+    "symptoms": [
+      "Sudden wilting of tomato plants",
+      "Yellowing and wilting of leaves",
+      "Brown vascular streaking in stems",
+      "Plant collapse without leaf yellowing",
+      "White bacterial ooze from cut stems",
+      "One-sided wilting of plants"
+    ],
+    "causes": "Bacterial infection by Ralstonia solanacearum. Soilborne, enters through roots, blocks water transport, very difficult to control",
+    "treatment": "No effective chemical treatment. Remove and destroy infected plants immediately (burn or bag, don't compost). Soil solarization in off-season. Treat soil with biocontrol agents like Pseudomonas",
+    "prevention": "Use disease-free transplants, practice long crop rotation (4+ years), improve drainage, avoid wounding roots, use grafted plants on resistant rootstocks, soil amendment with organic matter",
+    "severity_level": "Very High - No cure once infected",
+    "risk_season": "Warm weather (25-35°C), high soil moisture, year-round in tropical areas",
+    "affected_parts": ["Vascular system", "Roots", "Stems", "Entire plant"],
+    "related_pests": ["Root-knot nematodes can worsen disease"],
+    "symptom_questions": [
+      "Did the plant wilt suddenly on a hot day?",
+      "If you cut the stem, do you see brown streaks inside?",
+      "Is there white ooze coming from the cut stem?",
+      "Did the wilting start from one side of the plant?"
+    ],
+    "contextual_followups": [
+      "Have you grown tomatoes in this soil before?",
+      "Is the field well-drained or waterlogged?",
+      "Have you seen this disease in previous seasons?",
+      "Are there root-knot nematodes in your soil?"
+    ]
+  },
+  {
+    "crop_name": "Potato",
+    "disease_name": "Potato Early Blight",
+    "symptoms": [
+      "Circular brown spots with concentric rings on leaves",
+      "Target-like dark spots spreading on potato leaves",
+      "Brown lesions with alternating light and dark rings",
+      "Bull's eye lesions on potato foliage",
+      "Dark brown spots with yellow borders",
+      "Collar rot at soil line"
+    ],
+    "causes": "Fungal infection by Alternaria solani. Overwinters in soil and debris, spreads via rain splash, favored by warm weather with alternating wet and dry periods",
+    "treatment": "Apply Mancozeb fungicide at 2g per liter or Chlorothalonil. Spray at first appearance, repeat every 7-10 days. For severe cases, use Azoxystrobin or Difenoconazole",
+    "prevention": "Remove infected plant debris, practice crop rotation, use certified seed potatoes, avoid overhead irrigation, hill up soil around plants, maintain proper plant nutrition",
+    "severity_level": "Medium",
+    "risk_season": "Throughout growing season, peaks when plants are stressed or after flowering",
+    "affected_parts": ["Lower leaves first", "Stems", "Tubers (rare)", "Spreads upward"],
+    "related_pests": ["Colorado potato beetle damage can worsen disease"],
+    "symptom_questions": [
+      "Do you see target-like or concentric ring patterns?",
+      "Did symptoms start on lower, older leaves?",
+      "Are there dark spots with yellow halos?",
+      "Is there stem rot near the soil line?"
+    ],
+    "contextual_followups": [
+      "Did you plant certified seed potatoes?",
+      "Have you practiced crop rotation?",
+      "Is there old potato debris in the field?",
+      "Have temperatures been warm with occasional rain?"
+    ]
+  },
+  {
+    "crop_name": "Potato",
+    "disease_name": "Potato Late Blight",
+    "symptoms": [
+      "Water-soaked lesions on potato leaves",
+      "Dark brown lesions with white mold on undersides",
+      "Rapidly spreading brown patches on leaves",
+      "Black rot on potato tubers",
+      "Entire field turning brown quickly",
+      "White fungal growth in humid conditions"
+    ],
+    "causes": "Oomycete Phytophthora infestans (same as tomato late blight). Spreads explosively via wind-blown spores, can destroy fields in days",
+    "treatment": "Apply Metalaxyl + Mancozeb or Cymoxanil + Mancozeb immediately. Spray every 5-7 days. Use Copper fungicides as preventive. In severe outbreak, destroy crop to prevent spread",
+    "prevention": "Use certified disease-free seed, plant resistant varieties, apply preventive fungicides before disease appears, destroy volunteer plants, ensure good drainage, forecast-based spraying",
+    "severity_level": "Extreme - Most destructive potato disease",
+    "risk_season": "Cool moist weather (10-20°C), high humidity (>90%), especially monsoon season",
+    "affected_parts": ["Leaves", "Stems", "Tubers", "Entire plant and crop"],
+    "related_pests": ["None, but aphids may be present"],
+    "symptom_questions": [
+      "Are there water-soaked dark spots on leaves?",
+      "Do you see white mold on leaf undersides in morning?",
+      "Did the disease appear after cool, moist weather?",
+      "Are tubers showing brown to black rot?"
+    ],
+    "contextual_followups": [
+      "Has there been rain or heavy fog recently?",
+      "Are temperatures cool (below 20°C)?",
+      "Have neighboring fields been affected?",
+      "Did you use certified seed potatoes?"
+    ]
+  },
+  {
+    "crop_name": "Potato",
+    "disease_name": "Potato Scab",
+    "symptoms": [
+      "Rough corky lesions on potato skin",
+      "Raised brown scabby patches on tubers",
+      "Cork-like rough spots on potato surface",
+      "Warty growths on potato tubers",
+      "Shallow to deep pitted scabs",
+      "Only tuber skin affected, flesh normal"
+    ],
+    "causes": "Caused by Streptomyces bacteria (S. scabies). Favored by alkaline soil pH (>5.5), low soil moisture during tuber formation, and warm temperatures",
+    "treatment": "No direct treatment once infected. Focus on prevention. Avoid using infected tubers for seed. Scabby potatoes are safe to eat but unmarketable",
+    "prevention": "Maintain soil pH below 5.2 using sulfur amendments, ensure adequate irrigation during tuber formation (critical 2-6 weeks after flowering), use resistant varieties, avoid fresh manure, practice crop rotation with non-susceptible crops",
+    "severity_level": "Low to Medium - Cosmetic, doesn't affect eating quality",
+    "risk_season": "During tuber formation, warm dry soil conditions",
+    "affected_parts": ["Tuber skin only", "Flesh remains normal"],
+    "related_pests": ["None"],
+    "symptom_questions": [
+      "Are the lesions only on the skin surface?",
+      "Do the scabs feel rough and corky?",
+      "Is the inside of the potato normal?",
+      "Did you notice this after harvest?"
+    ],
+    "contextual_followups": [
+      "What is the pH of your soil?",
+      "Did you water adequately during tuber formation?",
+      "Did you apply fresh manure before planting?",
+      "Have you grown potatoes here before with scab?"
+    ]
+  }
+]
+

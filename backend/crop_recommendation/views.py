@@ -104,7 +104,7 @@ def recommend_crop(request):
             alternative_crops=result['alternative_crops']
         )
         
-        # Return response
+        # Return enhanced response
         return Response({
             'success': True,
             'recommendation': {
@@ -112,7 +112,16 @@ def recommend_crop(request):
                 'confidence_score': result['confidence_score'],
                 'alternative_crops': result['alternative_crops'],
                 'probabilities': result['probabilities'],
-                'model_info': result['model_info']
+                'model_info': result['model_info'],
+                
+                # Enhanced Information
+                'crop_information': result.get('crop_information', {}),
+                'reason': result.get('reason', ''),
+                'farming_suggestion': result.get('farming_suggestion', ''),
+                'detailed_explanation': result.get('detailed_explanation', ''),
+                'yield_prediction': result.get('yield_prediction', {}),
+                'nutrient_analysis': result.get('nutrient_analysis', {}),
+                'soil_assessment': result.get('soil_assessment', {})
             },
             'input_features': result['used_features'],
             'recommendation_id': recommendation.id
@@ -251,6 +260,44 @@ def get_weather_data(request):
         
     except Exception as e:
         logger.error(f"Error fetching weather data: {e}")
+        return Response({
+            'error': 'Internal server error',
+            'details': str(e)
+        }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def get_crop_info(request):
+    """
+    Get detailed information about a specific crop
+    """
+    try:
+        crop_name = request.data.get('crop_name', '').lower()
+        
+        if not crop_name:
+            return Response({
+                'error': 'Crop name is required'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Get crop information from the database
+        crop_info = crop_recommender.crop_database.get(crop_name)
+        
+        if crop_info:
+            return Response({
+                'success': True,
+                'crop_name': crop_name.title(),
+                'crop_info': crop_info
+            })
+        else:
+            return Response({
+                'success': False,
+                'error': f'Information for crop "{crop_name}" not available',
+                'available_crops': list(crop_recommender.crop_database.keys())
+            }, status=status.HTTP_404_NOT_FOUND)
+        
+    except Exception as e:
+        logger.error(f"Error fetching crop info: {e}")
         return Response({
             'error': 'Internal server error',
             'details': str(e)

@@ -24,6 +24,8 @@ urlpatterns = [
     path('api/', include('agri_app.urls')),  # add this
     path('api/disease/', include('disease_detection.urls')),
     path('api/crop/', include('crop_recommendation.urls')),
+    path('api/weather/', include('weather_alerts.urls')),
+    path('api/crop-prices/', include('crop_prices.urls')),  # Real-time crop prices
 ]
 
 if settings.DEBUG:

@@ -15,21 +15,60 @@ from rest_framework import serializers
 
 class UserProfileSerializer(serializers.ModelSerializer):
     crops_list = serializers.SerializerMethodField()
+    profile_photo_url = serializers.SerializerMethodField()
+    
     class Meta:
         model = UserProfile
-        fields = ['name', 'phone', 'city', 'address', 'preferred_language', 'crops', 'crops_list']
+        fields = ['name', 'phone', 'city', 'address', 'preferred_language', 'crops', 'crops_list', 'profile_photo', 'profile_photo_url']
+        extra_kwargs = {'profile_photo': {'write_only': True}}
+    
     def get_crops_list(self, obj):
         return obj.get_crops_list()
 
-@api_view(['GET'])
+    def get_profile_photo_url(self, obj):
+        # Return just the relative path - frontend will add baseUrl
+        if obj.profile_photo and hasattr(obj.profile_photo, 'url'):
+            url = obj.profile_photo.url
+            print(f"🖼️ Profile photo URL for {obj.user.username}: {url}")
+            return url  # Returns: /media/profiles/photo.jpg
+        return None
+
+@api_view(['GET', 'PUT', 'PATCH'])
 @permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
 def user_profile(request):
     try:
         profile = request.user.profile
-        serializer = UserProfileSerializer(profile)
-        return Response(serializer.data)
     except UserProfile.DoesNotExist:
         return Response({'error': 'Profile not found'}, status=404)
+    
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(profile, context={'request': request})
+        return Response(serializer.data)
+    
+    elif request.method in ['PUT', 'PATCH']:
+        # Update profile
+        partial = request.method == 'PATCH'
+        
+        # Handle crops_list specially
+        if 'crops_list' in request.data:
+            crops_list = request.data.get('crops_list')
+            if isinstance(crops_list, list):
+                profile.set_crops_list(crops_list)
+            elif isinstance(crops_list, str):
+                import json
+                try:
+                    crops_list = json.loads(crops_list)
+                    profile.set_crops_list(crops_list)
+                except:
+                    pass
+        
+        # Update other fields
+        serializer = UserProfileSerializer(profile, data=request.data, partial=partial, context={'request': request})
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 @api_view(['POST'])
 def register_user(request):
@@ -104,9 +143,27 @@ def login_user(request):
 
     username = request.data.get('username')
     password = request.data.get('password')
+    
+    print(f"DEBUG - Login attempt for username: '{username}'")
+    
+    # Validate that username and password are provided
+    if not username or not password:
+        print("DEBUG - Missing username or password")
+        return Response({'error': 'Username and password are required'}, status=400)
+    
+    # Check if user exists
+    try:
+        user_exists = User.objects.filter(username=username).exists()
+        print(f"DEBUG - User '{username}' exists: {user_exists}")
+    except Exception as e:
+        print(f"DEBUG - Error checking user: {e}")
+    
     user = authenticate(username=username, password=password)
+    
+    print(f"DEBUG - Authentication result: {user}")
 
     if user is None:
+        print("DEBUG - Authentication failed - Invalid credentials")
         return Response({'error': 'Invalid credentials'}, status=400)
 
     token, created = Token.objects.get_or_create(user=user)
@@ -116,6 +173,8 @@ def login_user(request):
         name = user.profile.name
     except Exception:
         name = user.username
+    
+    print(f"DEBUG - Login successful for user: {user.username}")
     return Response({'token': token.key, 'username': user.username, 'name': name})
 
 
@@ -151,10 +210,11 @@ def items(request):
                 'id': item.id,
                 'item_type': item.item_type,
                 'name': item.name,
+                'description': item.description,
                 'price': str(item.price),
                 'per_unit': item.per_unit,
                 'operator_available': item.operator_available,
-                'image_url': request.build_absolute_uri(item.image.url) if item.image else None,
+                'image_url': item.image.url if item.image else None,  # Return relative path only
                 'owner': item.owner.username if item.owner_id else None,
                 'owner_name': profile.name if profile else '',
                 'owner_phone': profile.phone if profile else '',
@@ -174,6 +234,7 @@ def items(request):
     data = request.data
     item_type = data.get('item_type')
     name = data.get('name')
+    description = data.get('description', '')
     price = data.get('price')
     per_unit = data.get('per_unit')  # optional
     operator_available = str(data.get('operator_available', 'false')).lower() in ['true', '1', 'yes']
@@ -214,6 +275,7 @@ def items(request):
         owner=owner,
         item_type=item_type,
         name=name,
+        description=description,
         price=price,
         per_unit=per_unit if item_type == 'rental' else None,
         operator_available=operator_available if item_type == 'rental' else False,

@@ -11,6 +11,7 @@ class LoginPage extends StatelessWidget {
   final TextEditingController passwordController = TextEditingController();
 
   void _login(BuildContext context) async {
+    print("DEBUG - Login attempt with username: ${usernameController.text}");
     final response = await http.post(
       Uri.parse("$baseUrl/api/login/"),
       headers: {"Content-Type": "application/json"},
@@ -20,19 +21,24 @@ class LoginPage extends StatelessWidget {
       }),
     );
 
+    print("DEBUG - Login response status: ${response.statusCode}");
+    print("DEBUG - Login response body: ${response.body}");
+
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       print("LOGIN SUCCESS: Token: ${data['token']}");
       final userName = data['name'] ?? data['username'] ?? 'User';
+      print("DEBUG - Username: $userName");
       // Save token to SharedPreferences
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString('token', data['token']);
+      print("DEBUG - Token saved to SharedPreferences");
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => HomePage(userName: userName)),
       );
     } else {
-      print("LOGIN FAILED: ${response.body}");
+      print("LOGIN FAILED: Status ${response.statusCode}, Body: ${response.body}");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Login failed. Please check your credentials.")),
       );

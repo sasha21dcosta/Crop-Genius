@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'auth_service.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'owner_profile.dart';
 
 class MarketplaceScreen extends StatefulWidget {
   const MarketplaceScreen({Key? key}) : super(key: key);
@@ -29,7 +30,18 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   Future<List<dynamic>> _fetchItems(String type) async {
     final res = await http.get(Uri.parse('$_baseUrl/items/?type=$type'));
     if (res.statusCode == 200) {
-      return jsonDecode(res.body) as List<dynamic>;
+      final items = jsonDecode(res.body) as List<dynamic>;
+      
+      // Build full URLs for images
+      for (var item in items) {
+        if (item['image_url'] != null && !item['image_url'].toString().startsWith('http')) {
+          final originalUrl = item['image_url'];
+          item['image_url'] = '$baseUrl${item['image_url']}';
+          print('📸 Marketplace image: $originalUrl → ${item['image_url']}');
+        }
+      }
+      
+      return items;
     }
     return [];
   }
@@ -67,23 +79,55 @@ class _MarketplaceScreenState extends State<MarketplaceScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F5F0),
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF2E7D32),
-        title: const Text('Marketplace & Rentals'),
-        bottom: TabBar(
-          controller: _tabController,
-          indicatorColor: Colors.white,
-          tabs: const [
-            Tab(text: 'Marketplace'),
-            Tab(text: 'Rental'),
+        backgroundColor: Colors.green.shade700,
+        elevation: 0,
+        title: Row(
+          children: [
+            Icon(Icons.store, size: 28),
+            const SizedBox(width: 8),
+            const Text('Marketplace'),
           ],
         ),
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: Container(
+            color: Colors.green.shade700,
+            child: TabBar(
+              controller: _tabController,
+              indicatorColor: Colors.white,
+              indicatorWeight: 3,
+              labelStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              unselectedLabelStyle: const TextStyle(fontSize: 15),
+              tabs: const [
+                Tab(
+                  icon: Icon(Icons.shopping_bag),
+                  text: 'For Sale',
+                ),
+                Tab(
+                  icon: Icon(Icons.agriculture),
+                  text: 'For Rent',
+                ),
+              ],
+            ),
+          ),
+        ),
         actions: [
-          IconButton(
-            onPressed: _onAddPressed,
-            icon: const Icon(Icons.add),
-            tooltip: 'Add Item',
+          Container(
+            margin: const EdgeInsets.only(right: 8),
+            child: IconButton(
+              onPressed: _onAddPressed,
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.add, size: 24),
+              ),
+              tooltip: 'Add Item',
+            ),
           ),
         ],
       ),
@@ -112,16 +156,38 @@ class _ItemsList extends StatelessWidget {
         }
         final items = snapshot.data ?? [];
         if (items.isEmpty) {
-          return const Center(
-            child: Text('No items found', style: TextStyle(fontSize: 16, color: Colors.grey)),
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(Icons.inventory_2_outlined, size: 80, color: Colors.grey.shade300),
+                const SizedBox(height: 16),
+                const Text(
+                  'No items found',
+                  style: TextStyle(fontSize: 18, color: Colors.grey, fontWeight: FontWeight.w500),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Add your first item to get started',
+                  style: TextStyle(fontSize: 14, color: Colors.grey.shade400),
+                ),
+              ],
+            ),
           );
         }
-        return ListView.builder(
-          padding: const EdgeInsets.symmetric(vertical: 8),
+        return GridView.builder(
+          padding: const EdgeInsets.all(12),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,  // 2 cards per row
+            childAspectRatio: 0.68,  // Slightly taller to accommodate operator badge
+            crossAxisSpacing: 12,
+            mainAxisSpacing: 12,
+          ),
           itemCount: items.length,
           itemBuilder: (context, index) {
             final item = items[index] as Map<String, dynamic>;
             final isRental = item['item_type'] == 'rental';
+            
             return GestureDetector(
               onTap: isRental
                   ? () {
@@ -134,74 +200,167 @@ class _ItemsList extends StatelessWidget {
                     }
                   : null,
               child: Card(
-                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                elevation: 4,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                elevation: 6,
-                shadowColor: Colors.green.withOpacity(0.3),
+                clipBehavior: Clip.antiAlias,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (item['image_url'] != null)
-                      ClipRRect(
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                        child: Image.network(
-                          item['image_url'],
-                          height: 180,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                        ),
-                      )
-                    else
-                      Container(
-                        height: 180,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade50,
-                          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-                        ),
-                        child: Icon(
-                          isRental ? Icons.agriculture : Icons.store,
-                          size: 60,
-                          color: const Color(0xFF2E7D32),
-                        ),
-                      ),
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            item['name'] ?? '',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF2E7D32),
+                    // Image Section
+                    Stack(
+                      children: [
+                        if (item['image_url'] != null)
+                          Image.network(
+                            item['image_url'],
+                            height: 140,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              print('Error loading image: ${item['image_url']}');
+                              return Container(
+                                height: 140,
+                                color: Colors.green.shade50,
+                                child: Icon(
+                                  isRental ? Icons.agriculture : Icons.store,
+                                  size: 50,
+                                  color: const Color(0xFF2E7D32),
+                                ),
+                              );
+                            },
+                          )
+                        else
+                          Container(
+                            height: 140,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Colors.green.shade300, Colors.green.shade100],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
+                            ),
+                            child: Center(
+                              child: Icon(
+                                isRental ? Icons.agriculture : Icons.shopping_bag,
+                                size: 50,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              Text('₹${item['price']} / ${item['per_unit'] ?? ''}',
-                                  style: const TextStyle(fontSize: 16)),
-                              const SizedBox(width: 16),
-                              Icon(Icons.location_on, size: 18, color: Colors.grey[600]),
-                              const SizedBox(width: 4),
-                              Text(item['location'] ?? 'Unknown',
-                                  style: const TextStyle(fontSize: 15)),
-                            ],
+                        // Category Badge
+                        Positioned(
+                          top: 8,
+                          right: 8,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: isRental ? Colors.orange.shade600 : Colors.blue.shade600,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Text(
+                              isRental ? 'RENTAL' : 'SALE',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
-                          if (isRental) ...[
-                            const SizedBox(height: 8),
-                            Row(
+                        ),
+                      ],
+                    ),
+                    
+                    // Details Section
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Icon(Icons.person, size: 18, color: Colors.grey),
-                                const SizedBox(width: 4),
-                                Text('Operator: ${item['operator_available'] ? 'Yes' : 'No'}',
-                                    style: const TextStyle(fontSize: 15)),
+                                Text(
+                                  item['name'] ?? '',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black87,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Icon(Icons.location_on, size: 12, color: Colors.grey.shade600),
+                                    const SizedBox(width: 2),
+                                    Expanded(
+                                      child: Text(
+                                        item['location'] ?? 'Unknown',
+                                        style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            
+                            // Price Section
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (isRental && item['operator_available'] == true)
+                                  Container(
+                                    margin: const EdgeInsets.only(bottom: 4),
+                                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.green.shade50,
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(color: Colors.green.shade300),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(Icons.person, size: 10, color: Colors.green.shade700),
+                                        const SizedBox(width: 2),
+                                        Text(
+                                          'Operator',
+                                          style: TextStyle(
+                                            fontSize: 9,
+                                            color: Colors.green.shade700,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                Row(
+                                  children: [
+                                    Text(
+                                      '₹${item['price']}',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green.shade800,
+                                      ),
+                                    ),
+                                    if (item['per_unit'] != null)
+                                      Text(
+                                        '/${item['per_unit']}',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.grey.shade600,
+                                        ),
+                                      ),
+                                  ],
+                                ),
                               ],
                             ),
                           ],
-                        ],
+                        ),
                       ),
                     ),
                   ],
@@ -226,6 +385,7 @@ class AddItemScreen extends StatefulWidget {
 class _AddItemScreenState extends State<AddItemScreen> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
+  final _descriptionController = TextEditingController();
   final _priceController = TextEditingController();
   String _perUnit = 'hour';
   bool _operatorAvailable = false;
@@ -304,6 +464,7 @@ class _AddItemScreenState extends State<AddItemScreen> {
     final request = http.MultipartRequest('POST', uri);
     request.fields['item_type'] = widget.itemType;
     request.fields['name'] = _nameController.text.trim();
+    request.fields['description'] = _descriptionController.text.trim();
     request.fields['price'] = _priceController.text.trim();
 
     if (widget.itemType == 'rental') {
@@ -337,8 +498,12 @@ class _AddItemScreenState extends State<AddItemScreen> {
   Widget build(BuildContext context) {
     final isRental = widget.itemType == 'rental';
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F5F0),
-      appBar: AppBar(title: Text('Add ${isRental ? 'Rental' : 'Marketplace'} Item'), backgroundColor: const Color(0xFF2E7D32)),
+      backgroundColor: Colors.grey.shade100,
+      appBar: AppBar(
+        title: Text('Add ${isRental ? 'Rental' : 'Marketplace'} Item'),
+        backgroundColor: Colors.green.shade700,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -362,6 +527,16 @@ class _AddItemScreenState extends State<AddItemScreen> {
                   labelText: 'Equipment / Item Name',
                   focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF2E7D32)))),
               validator: (v) => (v == null || v.trim().isEmpty) ? 'Required' : null,
+            ),
+            const SizedBox(height: 12),
+            TextFormField(
+              controller: _descriptionController,
+              decoration: const InputDecoration(
+                  labelText: 'Description',
+                  hintText: 'Describe your item, condition, features, etc.',
+                  focusedBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFF2E7D32)))),
+              maxLines: 3,
+              validator: (v) => (v == null || v.trim().isEmpty) ? 'Description is required' : null,
             ),
             const SizedBox(height: 12),
             TextFormField(
@@ -642,8 +817,12 @@ class _RentalDetailsPageState extends State<RentalDetailsPage> {
     List<String> availableSlots = getAvailableSlots();
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F5F0),
-      appBar: AppBar(title: Text(item['name'] ?? 'Rental Details'), backgroundColor: const Color(0xFF2E7D32)),
+      backgroundColor: Colors.grey.shade100,
+      appBar: AppBar(
+        title: Text(item['name'] ?? 'Rental Details'),
+        backgroundColor: Colors.green.shade700,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -664,6 +843,47 @@ class _RentalDetailsPageState extends State<RentalDetailsPage> {
                   Text(item['name'] ?? '', style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF2E7D32))),
                   const SizedBox(height: 8),
                   Text('₹${item['price']} / ${item['per_unit'] ?? ''}', style: const TextStyle(fontSize: 18)),
+                  
+                  if (item['description'] != null && item['description'].toString().isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade50,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.green.shade200),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(Icons.description, size: 18, color: Colors.green.shade700),
+                              const SizedBox(width: 6),
+                              Text(
+                                'Description',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green.shade800,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 6),
+                          Text(
+                            item['description'],
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey.shade800,
+                              height: 1.4,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                  
                   const SizedBox(height: 8),
                   Row(
                     children: [
@@ -748,22 +968,116 @@ class _RentalDetailsPageState extends State<RentalDetailsPage> {
                       ),
                     ),
                   const Divider(height: 32),
-                  const Text('Owner Information', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Name: ${item['owner_name'] ?? 'N/A'}'),
-                  Row(
-                    children: [
-                      const Icon(Icons.phone, size: 18, color: Colors.grey),
-                      const SizedBox(width: 4),
-                      Text(item['owner_phone'] ?? 'N/A', style: const TextStyle(fontSize: 16)),
-                      const SizedBox(width: 8),
-                      IconButton(
-                        icon: const Icon(Icons.call, color: Color(0xFF2E7D32)),
-                        tooltip: 'Call Owner',
-                        onPressed: () => _callOwner(item['owner_phone'] ?? ''),
-                      ),
-                    ],
+                  const Text(
+                    'Contact Owner',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
                   ),
-                  Text('Address: ${item['owner_address'] ?? 'N/A'}'),
+                  const SizedBox(height: 12),
+                  
+                  // Owner Profile Card
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => OwnerProfilePage(
+                            ownerUsername: item['owner'] ?? '',
+                            ownerName: item['owner_name'],
+                            ownerPhone: item['owner_phone'],
+                            ownerCity: item['location'],
+                            ownerAddress: item['owner_address'],
+                          ),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 3,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Row(
+                          children: [
+                            // Profile Photo
+                            CircleAvatar(
+                              radius: 35,
+                              backgroundColor: Colors.green.shade100,
+                              child: Icon(
+                                Icons.person,
+                                size: 35,
+                                color: Colors.green.shade700,
+                              ),
+                            ),
+                            const SizedBox(width: 16),
+                            
+                            // Owner Info
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    item['owner_name'] ?? 'Owner',
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  if (item['owner_phone'] != null)
+                                    Row(
+                                      children: [
+                                        Icon(Icons.phone, size: 16, color: Colors.grey.shade600),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          item['owner_phone'],
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.grey.shade700,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Tap to view profile',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.green.shade600,
+                                      fontStyle: FontStyle.italic,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            
+                            // Call Button
+                            IconButton(
+                              onPressed: () => _callOwner(item['owner_phone'] ?? ''),
+                              icon: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.green.shade600,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: const Icon(
+                                  Icons.call,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                              ),
+                              tooltip: 'Call Owner',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

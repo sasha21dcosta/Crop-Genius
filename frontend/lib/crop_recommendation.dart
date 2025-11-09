@@ -108,14 +108,242 @@ class _CropRecommendationScreenState extends State<CropRecommendationScreen> {
     );
   }
 
+  Future<void> _showCropDetails(String cropName) async {
+    // Show loading dialog first
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+
+    try {
+      final token = await getToken();
+      final response = await http.post(
+        Uri.parse('$baseUrl/api/crop/crop-info/'),
+        headers: {
+          'Authorization': 'Token $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'crop_name': cropName}),
+      );
+
+      // Close loading dialog
+      Navigator.pop(context);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success']) {
+          _showCropInfoDialog(cropName, data['crop_info']);
+        } else {
+          _showErrorDialog('Crop information not available');
+        }
+      } else {
+        _showErrorDialog('Failed to fetch crop information');
+      }
+    } catch (e) {
+      Navigator.pop(context); // Close loading dialog
+      _showErrorDialog('Error: $e');
+    }
+  }
+
+  void _showCropInfoDialog(String cropName, Map<String, dynamic> cropInfo) {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        child: Container(
+          constraints: const BoxConstraints(maxHeight: 600),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // Header
+              Container(
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.green.shade400, Colors.green.shade600],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.info_outline, color: Colors.white, size: 28),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        cropName.toUpperCase(),
+                        style: const TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
+                ),
+              ),
+              
+              // Content
+              Flexible(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Quick Facts
+                      Container(
+                        padding: const EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.blue.shade50,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.blue.shade200),
+                        ),
+                        child: Column(
+                          children: [
+                            _buildInfoRow('🌡️ Ideal Temperature', cropInfo['ideal_temp']),
+                            const Divider(height: 16),
+                            _buildInfoRow('💧 Ideal Rainfall', cropInfo['ideal_rainfall']),
+                            const Divider(height: 16),
+                            _buildInfoRow('🌾 Expected Yield', cropInfo['yield']),
+                            const Divider(height: 16),
+                            _buildInfoRow('📅 Season', cropInfo['season']),
+                            const Divider(height: 16),
+                            _buildInfoRow('⏱️ Duration', cropInfo['duration']),
+                          ],
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      
+                      // Why This Crop
+                      const Text(
+                        'Why This Crop?',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.amber.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.amber.shade200),
+                        ),
+                        child: Text(
+                          cropInfo['reason'],
+                          style: const TextStyle(fontSize: 15, height: 1.5),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      
+                      // Farming Suggestions
+                      const Text(
+                        'Farming Suggestions',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: Colors.green.shade50,
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(color: Colors.green.shade200),
+                        ),
+                        child: Text(
+                          cropInfo['suggestion'],
+                          style: const TextStyle(fontSize: 15, height: 1.5),
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 20),
+                      
+                      // Action Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            // You could add functionality to select this crop for recommendation
+                          },
+                          icon: const Icon(Icons.check_circle),
+                          label: const Text('Got It'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green.shade600,
+                            padding: const EdgeInsets.symmetric(vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 2,
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Text(
+            value,
+            style: const TextStyle(fontSize: 14),
+            textAlign: TextAlign.right,
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green.shade50,
+      backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        title: const Text('Crop Recommendation 🌱'),
+        title: Row(
+          children: [
+            Icon(Icons.eco, size: 28),
+            const SizedBox(width: 8),
+            const Text('Crop Recommendation'),
+          ],
+        ),
         backgroundColor: Colors.green.shade700,
-        centerTitle: true,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -302,8 +530,9 @@ class _CropRecommendationScreenState extends State<CropRecommendationScreen> {
             
             const SizedBox(height: 20),
             
-            // Recommendation Result
+            // Enhanced Recommendation Result
             if (_recommendation != null) ...[
+              // Main Recommendation Card
               Card(
                 elevation: 4,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -316,70 +545,406 @@ class _CropRecommendationScreenState extends State<CropRecommendationScreen> {
                         children: [
                           Icon(Icons.emoji_events, color: Colors.amber.shade600, size: 30),
                           const SizedBox(width: 10),
-                          const Text(
-                            'Recommendation Result',
-                            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          const Expanded(
+                            child: Text(
+                              'Recommended Crop',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 15),
                       
                       // Main Recommendation
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.green.shade50,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.green.shade200),
+                      InkWell(
+                        onTap: () => _showCropDetails(_recommendation!['predicted_crop']),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          width: double.infinity,
+                          padding: const EdgeInsets.all(15),
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              colors: [Colors.green.shade400, Colors.green.shade600],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    _recommendation!['predicted_crop'].toUpperCase(),
+                                    style: const TextStyle(
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Icon(
+                                    Icons.info_outline,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 8),
+                              Text(
+                                'Confidence: ${(_recommendation!['confidence_score'] * 100).toStringAsFixed(1)}%',
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              if (_recommendation!['crop_information'] != null) ...[
+                                const SizedBox(height: 12),
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        '🌾 Expected Yield: ${_recommendation!['crop_information']['expected_yield']}',
+                                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '📅 Season: ${_recommendation!['crop_information']['growing_season']}',
+                                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '⏱️ Duration: ${_recommendation!['crop_information']['duration']}',
+                                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                              const SizedBox(height: 8),
+                              Text(
+                                'Tap for more details',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                  fontSize: 12,
+                                  fontStyle: FontStyle.italic,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                        child: Column(
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 15),
+              
+              // Detailed Explanation Card
+              if (_recommendation!['detailed_explanation'] != null) ...[
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Text(
-                              _recommendation!['predicted_crop'],
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
+                            Icon(Icons.lightbulb, color: Colors.orange.shade600, size: 26),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Why This Crop?',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          _recommendation!['detailed_explanation'],
+                          style: const TextStyle(fontSize: 15, height: 1.5),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
+              
+              // Farming Suggestions Card
+              if (_recommendation!['farming_suggestion'] != null) ...[
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.agriculture, color: Colors.green.shade700, size: 26),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Farming Tips',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.green.shade50,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.green.shade200),
+                          ),
+                          child: Text(
+                            _recommendation!['farming_suggestion'],
+                            style: const TextStyle(fontSize: 15, height: 1.5),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
+              
+              // Nutrient Analysis Card
+              if (_recommendation!['nutrient_analysis'] != null) ...[
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.science, color: Colors.purple.shade600, size: 26),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Soil Nutrient Analysis',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        ...['N', 'P', 'K'].map((nutrient) {
+                          final analysis = _recommendation!['nutrient_analysis'][nutrient];
+                          final status = analysis['status'];
+                          Color statusColor = status == 'Optimal' 
+                              ? Colors.green 
+                              : (status == 'Low' ? Colors.orange : Colors.red);
+                          
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: statusColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(color: statusColor.withOpacity(0.3)),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                      decoration: BoxDecoration(
+                                        color: statusColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: Text(
+                                        '$nutrient: ${analysis['status']}',
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  '💊 ${analysis['recommendation']}',
+                                  style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '📦 ${analysis['quantity']}',
+                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '⏰ ${analysis['timing']}',
+                                  style: TextStyle(fontSize: 13, color: Colors.grey.shade700),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
+              
+              // Soil Assessment Card
+              if (_recommendation!['soil_assessment'] != null) ...[
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.terrain, color: Colors.brown.shade600, size: 26),
+                            const SizedBox(width: 10),
+                            const Text(
+                              'Soil Quality Assessment',
+                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 15),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _buildInfoTile(
+                                'Quality Index',
+                                _recommendation!['soil_assessment']['soil_quality_index'].toString(),
+                                Icons.speed,
+                                Colors.blue,
                               ),
                             ),
-                            const SizedBox(height: 5),
-                            Text(
-                              'Confidence: ${(_recommendation!['confidence_score'] * 100).toStringAsFixed(1)}%',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.green.shade700,
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _buildInfoTile(
+                                'Status',
+                                _recommendation!['soil_assessment']['soil_quality_status'],
+                                Icons.check_circle,
+                                Colors.green,
                               ),
                             ),
                           ],
                         ),
-                      ),
-                      
-                      const SizedBox(height: 15),
-                      
-                      // Alternative Crops
-                      if (_recommendation!['alternative_crops'].isNotEmpty) ...[
-                        const Text(
-                          'Alternative Options:',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        const SizedBox(height: 10),
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.amber.shade50,
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: Colors.amber.shade200),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'pH Level: ${_recommendation!['soil_assessment']['ph_level']} (${_recommendation!['soil_assessment']['ph_status']})',
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                '💡 ${_recommendation!['soil_assessment']['ph_recommendation']}',
+                                style: TextStyle(fontSize: 14, color: Colors.grey.shade700),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 15),
+              ],
+              
+              // Alternative Crops Card
+              if (_recommendation!['alternative_crops'].isNotEmpty) ...[
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(Icons.spa, color: Colors.teal.shade600, size: 26),
+                            const SizedBox(width: 10),
+                            const Expanded(
+                              child: Text(
+                                'Alternative Crops',
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Tap on any crop to view details',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey.shade600,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                         const SizedBox(height: 10),
                         Wrap(
                           spacing: 8,
                           runSpacing: 8,
                           children: (_recommendation!['alternative_crops'] as List)
-                              .map((crop) => Chip(
-                                    label: Text(crop),
+                              .map((crop) => ActionChip(
+                                    label: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Text(
+                                          crop,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 4),
+                                        Icon(
+                                          Icons.info_outline,
+                                          size: 16,
+                                          color: Colors.blue.shade700,
+                                        ),
+                                      ],
+                                    ),
                                     backgroundColor: Colors.blue.shade50,
-                                    side: BorderSide(color: Colors.blue.shade200),
+                                    side: BorderSide(color: Colors.blue.shade300),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    onPressed: () => _showCropDetails(crop),
                                   ))
                               .toList(),
                         ),
                       ],
-                    ],
+                    ),
                   ),
                 ),
-              ),
+              ],
             ],
             
             const SizedBox(height: 20),
@@ -406,6 +971,42 @@ class _CropRecommendationScreenState extends State<CropRecommendationScreen> {
             ],
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildInfoTile(String label, String value, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Column(
+        children: [
+          Icon(icon, color: color, size: 28),
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.grey.shade600,
+              fontWeight: FontWeight.w500,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }

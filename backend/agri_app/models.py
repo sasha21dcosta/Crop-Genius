@@ -12,6 +12,7 @@ class Item(models.Model):
     owner = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='items')
     item_type = models.CharField(max_length=20, choices=ItemType.choices)
     name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, default='')  # Description field
     price = models.DecimalField(max_digits=10, decimal_places=2)
     # For rental items only; optional for marketplace
     per_unit = models.CharField(max_length=20, blank=True, null=True)  # hour, acre, day
@@ -43,6 +44,7 @@ class UserProfile(models.Model):
     address = models.TextField()
     preferred_language = models.CharField(max_length=20, choices=[('English', 'English'), ('Hindi', 'Hindi'), ('Marathi', 'Marathi')])
     crops = models.CharField(max_length=255, blank=True, default='')  # comma-separated crop keys
+    profile_photo = models.ImageField(upload_to='profiles/', blank=True, null=True)
 
     def get_crops_list(self):
         return [c for c in self.crops.split(',') if c]
