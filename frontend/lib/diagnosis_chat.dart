@@ -6,6 +6,7 @@ import 'dart:io';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:record/record.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:image_picker/image_picker.dart';
 
 class DiagnosisChatScreen extends StatefulWidget {
   const DiagnosisChatScreen({Key? key}) : super(key: key);
@@ -25,6 +26,8 @@ class _DiagnosisChatScreenState extends State<DiagnosisChatScreen> {
   List<String> _userCrops = [];
   bool _cropsLoaded = false;
   String? _transcriptPreview;
+  final ImagePicker _imagePicker = ImagePicker();
+  bool _uploadingImage = false;
 
   // Chat session management
   int? _currentSessionId;
@@ -172,7 +175,13 @@ class _DiagnosisChatScreenState extends State<DiagnosisChatScreen> {
           _selectedCrop = session['crop'];
           _messages.clear();
           for (var msg in session['messages']) {
-            _messages.add(_ChatMessage(msg['text'], msg['is_user'], metadata: msg['metadata']));
+            // Extract image path from metadata if available
+            String? imagePath;
+            if (msg['metadata'] != null && msg['metadata']['image_path'] != null) {
+              imagePath = msg['metadata']['image_path'];
+            }
+            _messages.add(_ChatMessage(msg['text'], msg['is_user'], 
+                metadata: msg['metadata'], imagePath: imagePath));
           }
         });
         print('Loaded session $sessionId with ${_messages.length} messages');
@@ -567,6 +576,159 @@ class _DiagnosisChatScreenState extends State<DiagnosisChatScreen> {
     }
   }
 
+  Future<void> _pickAndDiagnoseImage() async {
+    if (_selectedCrop == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please select a crop first')),
+        );
+      }
+      return;
+    }
+
+    // Create session if none exists
+    if (_currentSessionId == null) {
+      await _createNewSession(closeDrawer: false);
+      if (_currentSessionId == null) return;
+    }
+
+    try {
+      // Pick image from gallery or camera
+      final XFile? image = await _imagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+      );
+
+      if (image == null) return;
+
+      if (!mounted) return;
+      
+      // Add user message showing image was uploaded
+      setState(() {
+        _messages.add(_ChatMessage('[📷 Uploaded image for diagnosis]', true, imagePath: image.path));
+        _uploadingImage = true;
+      });
+
+      // Save message with image metadata
+      await _saveMessage('[📷 Uploaded image for diagnosis]', true, metadata: {
+        'image_uploaded': true,
+        'image_path': image.path,
+        'image_name': image.name,
+      });
+      _scrollToBottom();
+
+      // Upload to backend
+      final token = await getToken();
+      final uri = Uri.parse('$baseUrl/api/disease/diagnose_image/');
+      final request = http.MultipartRequest('POST', uri);
+      
+      if (token != null) {
+        request.headers['Authorization'] = 'Token $token';
+      }
+      
+      request.fields['crop'] = _selectedCrop!;
+      request.files.add(await http.MultipartFile.fromPath('image', image.path));
+
+      print('📤 Uploading image to: $uri');
+      final response = await request.send();
+      final responseBody = await response.stream.bytesToString();
+
+      if (!mounted) return;
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(responseBody);
+        print('✅ Image diagnosis response: $data');
+
+        if (data['success'] == true) {
+          final disease = data['disease'];
+          final confidence = (data['confidence'] * 100).toStringAsFixed(1);
+          final className = data['class_name'];
+          
+          // Store disease for follow-up actions
+          _currentDisease = disease;
+          
+          // Create a comprehensive message
+          String aiMsg = '🔍 Image Analysis Result:\n\n';
+          aiMsg += '🌿 Disease Detected: $className\n';
+          aiMsg += '📊 Confidence: $confidence%\n\n';
+          
+          if (data['top_predictions'] != null) {
+            aiMsg += 'Top Predictions:\n';
+            for (var pred in data['top_predictions']) {
+              final predConfidence = (pred['confidence'] * 100).toStringAsFixed(1);
+              aiMsg += '  • ${pred['class_name']}: $predConfidence%\n';
+            }
+          }
+          
+          aiMsg += '\nWhat would you like to know about this disease?';
+
+          setState(() {
+            _messages.add(_ChatMessage(aiMsg, false, metadata: data));
+          });
+
+          await _saveMessage(aiMsg, false, metadata: data);
+
+          // Show action buttons
+          final quickActions = [
+            {'label': '💊 Treatment', 'action': 'treatment'},
+            {'label': '🛡️ Prevention', 'action': 'prevention'},
+            {'label': '📋 More Info', 'action': 'more_info'},
+          ];
+          
+          setState(() {
+            _pendingFollowupQuestions = quickActions.map((a) => a['label'].toString()).toList();
+            _currentQuickActions = quickActions;
+            _isInClarificationMode = false;
+          });
+        } else {
+          final errorMsg = data['message'] ?? 'Unable to analyze image';
+          setState(() {
+            _messages.add(_ChatMessage('❌ $errorMsg', false));
+          });
+          await _saveMessage('❌ $errorMsg', false);
+        }
+      } else {
+        final error = response.statusCode == 503 
+            ? '⚠️ Model server is not running. Please ensure Colab is active with ngrok.'
+            : '❌ Error analyzing image: ${response.statusCode}';
+        
+        setState(() {
+          _messages.add(_ChatMessage(error, false));
+        });
+        await _saveMessage(error, false);
+        
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(error)),
+          );
+        }
+      }
+    } catch (e) {
+      print('ERROR - Image upload failed: $e');
+      if (!mounted) return;
+      
+      final errorMsg = '❌ Failed to upload image: $e';
+      setState(() {
+        _messages.add(_ChatMessage(errorMsg, false));
+      });
+      await _saveMessage(errorMsg, false);
+      
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Image upload failed: $e')),
+        );
+      }
+    } finally {
+      if (!mounted) return;
+      setState(() {
+        _uploadingImage = false;
+      });
+      _scrollToBottom();
+    }
+  }
+
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
@@ -816,16 +978,60 @@ class _DiagnosisChatScreenState extends State<DiagnosisChatScreen> {
                           : Colors.grey.shade200,
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Text(msg.text),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Show image if available
+                        if (msg.imagePath != null) ...[
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: File(msg.imagePath!).existsSync()
+                                ? Image.file(
+                                    File(msg.imagePath!),
+                                    width: 200,
+                                    height: 200,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Container(
+                                    width: 200,
+                                    height: 200,
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey.shade300,
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.image_not_supported, 
+                                            size: 50, color: Colors.grey.shade600),
+                                        const SizedBox(height: 8),
+                                        Text('Image not available',
+                                            style: TextStyle(color: Colors.grey.shade600, fontSize: 12)),
+                                      ],
+                                    ),
+                                  ),
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                        Text(msg.text),
+                      ],
+                    ),
                   ),
                 );
               },
             ),
           ),
-          if (_loading)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: CircularProgressIndicator(),
+          if (_loading || _uploadingImage)
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CircularProgressIndicator(),
+                  const SizedBox(width: 12),
+                  Text(_uploadingImage ? 'Analyzing image...' : 'Processing...'),
+                ],
+              ),
             ),
           SafeArea(
             child: Padding(
@@ -929,13 +1135,27 @@ class _DiagnosisChatScreenState extends State<DiagnosisChatScreen> {
                     ),
                   Row(
                     children: [
+                      // Image upload button
+                      IconButton(
+                        icon: Icon(
+                          Icons.image,
+                          color: _selectedCrop != null && !_loading && !_uploadingImage
+                              ? Colors.green.shade800
+                              : Colors.grey,
+                        ),
+                        onPressed: (_selectedCrop != null && !_loading && !_uploadingImage)
+                            ? _pickAndDiagnoseImage
+                            : null,
+                        tooltip: 'Upload Image',
+                      ),
+                      // Voice input button
                       SpeechToTextMic(
                         onTranscript: (t) => setState(() {
                           _transcriptPreview = t;
                           _controller.text = t;
                           _controller.selection = TextSelection.collapsed(offset: t.length);
                         }),
-                        enabled: _selectedCrop != null && !_loading,
+                        enabled: _selectedCrop != null && !_loading && !_uploadingImage,
                       ),
                       Expanded(
                         child: TextField(
@@ -944,14 +1164,14 @@ class _DiagnosisChatScreenState extends State<DiagnosisChatScreen> {
                             hintText: _selectedCrop == null
                                 ? 'कृपया पहले फसल चुने... | कृपया योग्य पीक निवडा... | Select a crop first...'
                                 : 'लक्षण टाइप कीजिये या बोलिए... | लक्षण बोला किंवा टाइप करा... | Type or speak symptoms for $_selectedCrop...',
-                            enabled: _selectedCrop != null,
+                            enabled: _selectedCrop != null && !_uploadingImage,
                           ),
                           onSubmitted: (_) => _sendMessage(),
                         ),
                       ),
                       IconButton(
                         icon: const Icon(Icons.send, color: Colors.green),
-                        onPressed: (_loading || _selectedCrop == null)
+                        onPressed: (_loading || _uploadingImage || _selectedCrop == null)
                             ? null
                             : () {
                                 setState(() => _transcriptPreview = null);
@@ -974,7 +1194,8 @@ class _ChatMessage {
   final String text;
   final bool isUser;
   final Map<String, dynamic>? metadata;
-  _ChatMessage(this.text, this.isUser, {this.metadata});
+  final String? imagePath;  // Path to uploaded image
+  _ChatMessage(this.text, this.isUser, {this.metadata, this.imagePath});
 }
 
 class SpeechToTextMic extends StatefulWidget {
